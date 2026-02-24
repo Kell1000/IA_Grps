@@ -9,5 +9,7 @@ afficher les entendues des scores.
 afficher l'écart-type et le variance.
 EXERCICE3:
 afficher le IQR.
+Détection des Valeurs Aberrantes;
+EXERCICE4:
 import plotly.
 afficher une histogramme pur les distrubutions des scores.
