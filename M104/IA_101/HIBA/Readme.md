@@ -1,46 +1,63 @@
 # 🎓 Analyse de la Performance des Étudiants (Student Performance)
 
-Ce projet propose une analyse statistique complète des scores d'étudiants à partir d'un fichier CSV. L'objectif est de mettre en pratique les concepts de tendance centrale, de dispersion et de visualisation de données avec Python.
+Ce projet propose une analyse statistique approfondie des scores d'étudiants (Mathématiques, Lecture, Écriture) à partir d'un fichier CSV. L'objectif est d'explorer les tendances centrales, la dispersion des données et d'identifier les facteurs socio-économiques qui influencent la réussite scolaire.
 
 ## 🛠️ Technologies Utilisées
 
-* **Python 3**
-* **Pandas** : Lecture et manipulation des données.
-* **NumPy** : Calculs statistiques avancés.
-* **Plotly** : Création d'histogrammes interactifs.
+* **Python 3.x**
+* **Pandas** : Manipulation des DataFrames et nettoyage des données.
+* **NumPy** : Calculs mathématiques et vectoriels.
+* **Plotly** : Créations de visualisations interactives.
 
 ---
 
 ## 📂 Structure des Exercices
 
 ### EXERCICE 1 : Mesures de Tendance Centrale
-* Importation de `numpy` et `pandas`.
-* Chargement du fichier CSV.
-* Calcul et affichage de :
-    * **Moyenne** : La valeur moyenne des scores.
-    * **Médiane** : La valeur séparant la moitié supérieure de la moitié inférieure.
-    * **Mode** : La valeur la plus récurrente.
-* **Analyse** : Déduction du type de distribution (Symétrique, Skewed/Asymétrique) selon la position relative de ces mesures.
+* Calcul de la **Moyenne**, **Médiane**, et du **Mode**.
+* **Analyse de distribution** : Comparaison des mesures pour déduire l'asymétrie (Skewness).
+    * Si $Moyenne > Médiane$ : Asymétrie positive (Skewed right).
+    * Si $Moyenne < Médiane$ : Asymétrie négative (Skewed left).
 
 
 
 ### EXERCICE 2 : Dispersion des Données
-* **Étendue** (Range) : Écart entre le score maximum et minimum.
-* **Variance** : Mesure de la variabilité des scores.
-* **Écart-type** : Mesure de la dispersion autour de la moyenne.
+* **Étendue (Range)** : Écart total entre le score maximum et minimum.
+* **Variance ($\sigma^2$)** et **Écart-type ($\sigma$)** : Mesure de la dispersion des notes autour de la moyenne.
 
 ### EXERCICE 3 : Quartiles et Valeurs Aberrantes
-* Calcul de l'**IQR** (Interquartile Range).
-* **Détection des Outliers** : Identification des valeurs atypiques qui pourraient fausser l'analyse en utilisant la méthode des barrières de Tukey ($Q1 - 1.5 \times IQR$ et $Q3 + 1.5 \times IQR$).
+* Calcul de l'**IQR** (Interquartile Range) : $Q3 - Q1$.
+* **Détection des Outliers** : Identification des scores atypiques via la méthode de Tukey :
+  $$[Q1 - 1.5 \times IQR, \ Q3 + 1.5 \times IQR]$$
+
+### EXERCICE 4 : Visualisation Interactive (Plotly)
+Pour une compréhension visuelle complète, trois types de graphiques sont générés :
+* **Histogrammes** : Pour observer la forme de la distribution globale.
+* **Box Plots (Boîtes à moustaches)** : Pour visualiser les quartiles et confirmer la présence des valeurs aberrantes (outliers) détectées à l'exercice 3.
+* **Graphiques en Barres** : Pour comparer les performances moyennes entre différents groupes.
 
 
 
 [Image of boxplot showing outliers and interquartile range]
 
 
-### EXERCICE 4 : Visualisation Interactive
-* Utilisation de `plotly.express`.
-* Génération d'un **histogramme** pour visualiser la distribution réelle des scores et confirmer les hypothèses de l'Exercice 1.
+### EXERCICE 5 : Analyse Croisée et Insights 🔍
+#### a) Corrélation entre les matières
+Calcul du **Coefficient de Pearson ($r$)** pour évaluer la force du lien entre les scores :
+$$r = \frac{\sum(x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum(x_i - \bar{x})^2 \cdot \sum(y_i - \bar{y})^2}}$$
+
+| Valeur de $r$ | Force | Signification |
+| :--- | :--- | :--- |
+| 0.7 - 1.0 | Forte | Relation très marquée |
+| 0.4 - 0.7 | Modérée | Relation significative |
+| 0.0 - 0.4 | Faible | Relation peu marquée |
+
+#### b) Facteurs Influentiels
+Analyse de l'impact des variables catégorielles :
+* **Parental level of education** : Impact du milieu familial.
+* **Lunch** : Influence du statut socio-économique.
+* **Test preparation course** : Analyse de l'efficacité du soutien scolaire.
+* **Gender & Race/Ethnicity** : Étude de la diversité des résultats.
 
 ---
 
@@ -48,4 +65,4 @@ Ce projet propose une analyse statistique complète des scores d'étudiants à p
 
 1. **Cloner le projet** :
    ```bash
-   git clone [https://github.com/votre-nom-utilisateur/student-performance-analysis.git](https://github.com/votre-nom-utilisateur/student-performance-analysis.git)
+   git clone [https://github.com/votre-nom-utilisateur/student-performance-analysis.git](https://github.com/votre-nom-utilisateur/student-performance-analysis.git))
