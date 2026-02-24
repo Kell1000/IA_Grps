@@ -1,0 +1,80 @@
+    <!DOCTYPE html>
+    <html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>Analyse Statistique des Performances Étudiantes</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 20px; background-color: #f8f8f8; }
+            h1, h2 { color: #333; }
+            canvas { background: #fff; border: 1px solid #ccc; margin-bottom: 30px; }
+            .section { margin-bottom: 50px; }
+        </style>
+    </head>
+    <body>
+    
+    <h1>Analyse Statistique des Performances Étudiantes</h1>
+    
+    <div class="section">
+        <h2>1. Moyenne des Scores</h2>
+        <canvas id="meanChart" width="400" height="200"></canvas>
+    </div>
+    
+    <div class="section">
+        <h2>2. Dispersion des Scores (Écart-type)</h2>
+        <canvas id="stdChart" width="400" height="200"></canvas>
+    </div>
+    
+    <div class="section">
+        <h2>3. Boxplot (Visualisation des Quartiles et Outliers)</h2>
+        <canvas id="boxChart" width="400" height="200"></canvas>
+    </div>
+    
+    <script>
+        // Données exemples – remplace par tes résultats réels
+        const subjects = ['Math', 'Lecture', 'Écriture'];
+        const meanScores = [68, 72, 70];   // Moyenne
+        const stdScores = [14, 12, 15];    // Écart-type
+    
+        // Graphique Moyenne
+        new Chart(document.getElementById('meanChart'), {
+            type: 'bar',
+            data: {
+                labels: subjects,
+                datasets: [{
+                    label: 'Moyenne des scores',
+                    data: meanScores,
+                    backgroundColor: ['#4CAF50','#2196F3','#FFC107']
+                }]
+            }
+        });
+    
+        // Graphique Écart-type
+        new Chart(document.getElementById('stdChart'), {
+            type: 'bar',
+            data: {
+                labels: subjects,
+                datasets: [{
+                    label: 'Écart-type des scores',
+                    data: stdScores,
+                    backgroundColor: ['#FF5722','#9C27B0','#03A9F4']
+                }]
+            }
+        });
+    
+        // Boxplot simulé avec barres – pour un vrai boxplot utiliser Chart.js Boxplot plugin
+        new Chart(document.getElementById('boxChart'), {
+            type: 'bar',
+            data: {
+                labels: subjects,
+                datasets: [{
+                    label: 'Q1-Q3 + outliers',
+                    data: [ [55, 80], [60, 85], [50, 82] ], // Q1-Q3 approximatif
+                    backgroundColor: ['#FF9800','#00BCD4','#8BC34A']
+                }]
+            }
+        });
+    </script>
+    
+    </body>
+    </html>
