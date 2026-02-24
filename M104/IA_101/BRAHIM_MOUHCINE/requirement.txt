@@ -1,0 +1,33 @@
+PRÉREQUIS D'UTILISATION
+=======================
+
+Cette application est une "Single Page Application" (SPA) qui fonctionne entièrement dans le navigateur.
+Aucune installation de serveur (Python, Node.js, PHP, etc.) n'est nécessaire.
+
+LOGICIELS REQUIS :
+------------------
+1. Un navigateur web moderne et à jour :
+   - Google Chrome
+   - Microsoft Edge
+   - Mozilla Firefox
+   - Safari
+   - Opera
+
+CONNEXION INTERNET :
+--------------------
+Une connexion internet est requise lors du chargement de la page pour télécharger les librairies suivantes via CDN (Content Delivery Network) :
+- Chart.js (Graphiques)
+- PapaParse (Lecture CSV)
+- Polices Google Fonts (Inter)
+
+INSTALLATION :
+--------------
+Aucune installation complexe n'est requise.
+1. Téléchargez simplement le fichier "Analyse_Statistique_CSV_Pro.html".
+2. Double-cliquez sur le fichier pour l'ouvrir dans votre navigateur par défaut.
+
+UTILISATION :
+-------------
+1. Ouvrez le fichier HTML.
+2. Glissez-déposez un fichier CSV dans la zone dédiée.
+3. L'analyse se lance automatiquement.
