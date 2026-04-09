@@ -1,0 +1,251 @@
+Ticket_ID,Airline,Origin,Destination,Distance_km,Class,Days_Before_Departure,Price_USD
+1,Saudia,Mumbai,Paris,2643,Economy,28,555.3
+2,Etihad,Istanbul,Jeddah,8266,Business,98,2070.27
+3,British Airways,Dubai,Riyadh,2698,First,21,1883.11
+4,Emirates,London,Istanbul,7956,First,24,5349.65
+5,Qatar Airways,Doha,Dubai,1308,Business,60,516.19
+6,Turkish Airlines,Mumbai,Istanbul,9382,First,19,6495.84
+7,Emirates,Doha,Dubai,3506,Economy,85,439.16
+8,Turkish Airlines,Istanbul,Doha,6122,First,88,2323.31
+9,Qatar Airways,Paris,Riyadh,7150,Business,24,3032.38
+10,Flynas,New York,Jeddah,3760,First,36,2282.17
+11,Saudia,Mumbai,New York,6328,First,55,3257.78
+12,Qatar Airways,Doha,Cairo,5589,Business,108,1404.2
+13,Flynas,Mumbai,Paris,2049,Business,72,632.42
+14,Qatar Airways,Doha,Cairo,9572,Economy,48,1485.53
+15,Lufthansa,Jeddah,Cairo,5492,Business,38,2210.16
+16,Saudia,Paris,London,3864,First,9,2895.64
+17,Turkish Airlines,New York,Mumbai,5573,Business,82,1334.79
+18,Lufthansa,New York,Riyadh,11244,Economy,37,1929.27
+19,Saudia,Riyadh,Mumbai,7444,First,109,2807.81
+20,Lufthansa,Paris,Dubai,9731,First,4,7601.0
+21,Qatar Airways,Doha,New York,10971,First,19,7698.07
+22,British Airways,London,New York,1430,Business,3,790.36
+23,Saudia,Istanbul,New York,6192,Business,23,2675.72
+24,Emirates,Istanbul,Jeddah,440,Economy,86,185.7
+25,Etihad,Riyadh,Cairo,2533,Business,54,876.97
+26,Etihad,Mumbai,Istanbul,3201,Business,71,1029.87
+27,Saudia,Istanbul,Cairo,2880,Economy,38,507.24
+28,British Airways,Riyadh,Dubai,10297,Economy,93,1234.43
+29,Qatar Airways,New York,Istanbul,2817,Business,99,682.12
+30,Saudia,Jeddah,London,6248,Business,82,1613.13
+31,Etihad,Jeddah,Istanbul,9267,First,34,5746.4
+32,Lufthansa,Dubai,New York,1682,First,83,644.19
+33,Lufthansa,New York,London,10010,Business,44,3606.08
+34,Etihad,Mumbai,London,4319,Economy,53,815.27
+35,Saudia,Doha,London,5531,First,45,3229.28
+36,Flynas,Doha,Istanbul,2695,Economy,55,552.54
+37,British Airways,Paris,Doha,8180,Business,40,3088.65
+38,Emirates,New York,Istanbul,9282,Economy,111,1142.37
+39,Emirates,Paris,Istanbul,3605,Economy,19,844.79
+40,Qatar Airways,Mumbai,Cairo,4434,Economy,99,504.74
+41,British Airways,Jeddah,Paris,8451,First,4,6581.19
+42,Qatar Airways,Istanbul,Dubai,11502,Economy,43,1934.15
+43,Flynas,Mumbai,Istanbul,10486,First,95,3977.68
+44,Emirates,New York,Jeddah,5881,Economy,33,1086.89
+45,Qatar Airways,Riyadh,Paris,471,First,88,280.23
+46,British Airways,Dubai,Paris,2652,Economy,39,533.61
+47,Lufthansa,Paris,Istanbul,4452,Business,6,2267.18
+48,British Airways,London,Paris,3448,Economy,15,863.15
+49,Qatar Airways,London,New York,3482,Economy,90,522.34
+50,Emirates,Riyadh,New York,3696,Economy,6,907.58
+51,Emirates,Cairo,Istanbul,10191,Business,20,4532.22
+52,Qatar Airways,Mumbai,London,8504,Economy,76,988.75
+53,Turkish Airlines,Jeddah,Istanbul,5677,Economy,76,717.41
+54,Turkish Airlines,Paris,Cairo,11328,Business,80,2704.53
+55,Lufthansa,Cairo,Doha,4586,Economy,50,711.26
+56,Turkish Airlines,Paris,New York,9950,Economy,66,1407.07
+57,British Airways,Paris,Doha,1062,Business,26,556.44
+58,Qatar Airways,Mumbai,Paris,5736,First,30,3786.09
+59,Lufthansa,Mumbai,Istanbul,951,Economy,102,134.76
+60,British Airways,Jeddah,Paris,4868,First,81,1952.84
+61,Lufthansa,New York,Doha,11300,First,9,8559.08
+62,Flynas,London,Dubai,4101,First,18,2912.55
+63,Etihad,Istanbul,London,2201,Business,80,532.94
+64,Saudia,Dubai,Jeddah,6533,First,37,4045.74
+65,British Airways,Riyadh,Paris,8616,Business,87,2085.04
+66,Turkish Airlines,Dubai,Riyadh,718,Economy,72,106.07
+67,Qatar Airways,Jeddah,Cairo,6879,First,111,2555.85
+68,Etihad,Cairo,Istanbul,6998,Economy,8,1677.98
+69,Turkish Airlines,Dubai,London,931,First,6,814.07
+70,Qatar Airways,Cairo,Mumbai,4258,First,60,2073.14
+71,British Airways,New York,Riyadh,3485,Economy,95,498.29
+72,Qatar Airways,Cairo,Paris,5031,Economy,92,597.5
+73,Flynas,Jeddah,London,3101,First,64,1444.13
+74,Lufthansa,Jeddah,Cairo,8292,Economy,87,905.78
+75,Etihad,Riyadh,Mumbai,3075,Economy,32,631.08
+76,Flynas,Doha,London,1621,Economy,60,380.98
+77,Etihad,Istanbul,Dubai,6447,Economy,74,775.55
+78,Saudia,Istanbul,Cairo,8736,First,61,4160.18
+79,Saudia,Jeddah,Doha,965,Economy,8,287.58
+80,Saudia,New York,Istanbul,8125,Business,3,4032.71
+81,British Airways,Jeddah,Dubai,10236,Economy,13,2284.29
+82,Lufthansa,New York,Dubai,804,First,16,650.83
+83,Saudia,Doha,Dubai,6644,First,110,2499.06
+84,Lufthansa,Cairo,Riyadh,4239,Economy,21,942.15
+85,Turkish Airlines,Paris,Cairo,10287,Business,112,2497.11
+86,Lufthansa,Dubai,New York,2167,Business,107,594.92
+87,Qatar Airways,Mumbai,Riyadh,884,Business,14,440.82
+88,Lufthansa,Jeddah,Doha,6188,Business,35,2445.98
+89,Lufthansa,Istanbul,New York,5347,Business,66,1512.77
+90,Qatar Airways,Istanbul,Jeddah,11901,Business,75,3014.65
+91,British Airways,Mumbai,Paris,5613,Business,30,2297.97
+92,British Airways,New York,Jeddah,10446,Business,40,3975.44
+93,Lufthansa,Paris,Dubai,2068,Economy,93,354.7
+94,Etihad,Istanbul,Riyadh,396,First,107,245.53
+95,Lufthansa,Mumbai,Cairo,11306,Economy,19,2325.11
+96,Flynas,Paris,Cairo,2607,Economy,73,382.22
+97,Lufthansa,Paris,Cairo,1888,First,66,1030.1
+98,Emirates,New York,Mumbai,8561,Economy,98,1001.0
+99,British Airways,Mumbai,London,1168,Economy,27,355.78
+100,Lufthansa,Doha,Riyadh,5802,Business,96,1479.53
+101,Saudia,New York,Doha,10818,Economy,25,2227.96
+102,British Airways,Mumbai,Cairo,8838,Economy,62,1211.14
+103,Etihad,Cairo,Istanbul,8201,Business,86,2009.24
+104,Turkish Airlines,Mumbai,Paris,3857,Business,60,1310.46
+105,Lufthansa,Mumbai,London,8427,Economy,19,1792.07
+106,Emirates,Dubai,Cairo,7266,Economy,62,1058.28
+107,Flynas,Jeddah,Istanbul,7532,Economy,68,981.05
+108,Flynas,London,Doha,3314,Business,47,1198.38
+109,Etihad,Istanbul,Dubai,3445,First,105,1417.51
+110,Qatar Airways,Istanbul,Riyadh,2623,Business,18,1243.63
+111,Etihad,Cairo,Riyadh,11081,Business,91,2627.88
+112,Saudia,Doha,Cairo,8949,First,39,5377.31
+113,British Airways,Istanbul,Dubai,7074,First,97,2656.31
+114,Saudia,Cairo,Paris,5301,Economy,114,696.06
+115,Turkish Airlines,Doha,Cairo,10409,First,75,4295.4
+116,Emirates,London,Dubai,10021,First,41,5889.12
+117,Emirates,Dubai,New York,8817,Economy,8,2038.94
+118,Saudia,London,Jeddah,7499,Economy,3,1749.77
+119,Turkish Airlines,Jeddah,Cairo,2974,Economy,117,393.39
+120,Saudia,Cairo,Jeddah,5106,First,50,2720.95
+121,Flynas,London,New York,2060,Business,76,523.36
+122,Saudia,Riyadh,Istanbul,2195,Economy,97,425.61
+123,Turkish Airlines,Riyadh,Paris,7345,Economy,86,848.01
+124,Qatar Airways,Paris,Dubai,2970,Business,69,817.76
+125,British Airways,Istanbul,Cairo,4168,Business,7,2044.55
+126,Etihad,Doha,Riyadh,2279,Economy,103,306.5
+127,British Airways,Doha,Riyadh,5010,First,106,1947.5
+128,Saudia,Paris,Istanbul,7129,First,63,3316.6
+129,Flynas,Riyadh,Dubai,7895,Business,83,1895.91
+130,Emirates,London,Istanbul,6494,Economy,5,1593.55
+131,Flynas,Dubai,Riyadh,9975,Business,108,2477.71
+132,Etihad,Paris,Cairo,1602,Business,19,824.72
+133,Qatar Airways,Istanbul,Paris,484,First,70,293.25
+134,Saudia,Jeddah,Cairo,4205,Economy,49,742.15
+135,Saudia,Paris,Cairo,9160,Economy,12,2045.27
+136,Emirates,Paris,Doha,10255,Business,94,2392.13
+137,British Airways,Cairo,Riyadh,4918,Economy,101,584.62
+138,Lufthansa,Riyadh,Doha,7826,First,24,5264.14
+139,Flynas,New York,Paris,7324,Economy,71,921.18
+140,Qatar Airways,Paris,London,11511,Business,66,3274.89
+141,Saudia,Dubai,Riyadh,10709,Business,7,5133.78
+142,Emirates,New York,Paris,8104,Economy,78,916.41
+143,Emirates,London,Cairo,8474,Business,108,1984.74
+144,Turkish Airlines,Doha,Jeddah,11773,Business,56,3758.74
+145,Etihad,Jeddah,Cairo,4154,First,89,1554.41
+146,Saudia,Cairo,London,4529,Business,30,1883.93
+147,Qatar Airways,London,Mumbai,9400,Business,117,2299.94
+148,Turkish Airlines,Dubai,Riyadh,7661,Economy,71,955.08
+149,Saudia,Jeddah,London,2927,Economy,71,373.53
+150,Qatar Airways,Doha,London,6143,First,14,4434.71
+151,Qatar Airways,Cairo,Paris,3733,First,48,2110.31
+152,Qatar Airways,Dubai,Mumbai,4151,Economy,23,857.6
+153,Turkish Airlines,Riyadh,Mumbai,1548,First,50,935.49
+154,Qatar Airways,Mumbai,Dubai,6407,Economy,89,770.28
+155,Emirates,Paris,Jeddah,2186,First,67,1135.92
+156,Emirates,London,New York,3806,First,11,2852.67
+157,Turkish Airlines,Paris,Istanbul,6948,First,52,3648.54
+158,Saudia,Cairo,Riyadh,11771,Business,116,2789.98
+159,British Airways,London,Riyadh,4772,Economy,82,626.66
+160,British Airways,London,Riyadh,5319,Economy,15,1254.97
+161,Emirates,Paris,London,9472,First,118,3519.14
+162,British Airways,Riyadh,New York,9279,First,98,3485.76
+163,Qatar Airways,Dubai,Jeddah,11848,First,81,4419.58
+164,Qatar Airways,Paris,Mumbai,9012,First,38,5367.82
+165,Qatar Airways,Istanbul,London,4565,First,81,1798.55
+166,Emirates,London,Doha,8152,First,70,3552.64
+167,British Airways,New York,Cairo,5059,Business,3,2536.28
+168,Qatar Airways,Istanbul,Mumbai,10760,Economy,32,2052.97
+169,Lufthansa,Mumbai,Paris,10515,First,56,5363.96
+170,British Airways,London,Jeddah,9263,First,20,6473.45
+171,Saudia,Doha,Dubai,9131,First,115,3391.11
+172,Etihad,Dubai,Jeddah,8402,Business,75,2116.88
+173,Lufthansa,Mumbai,Doha,2274,Economy,40,451.04
+174,Emirates,Doha,Istanbul,7767,First,73,3172.05
+175,Etihad,Istanbul,Paris,460,First,118,365.36
+176,Etihad,Doha,Paris,4413,Business,112,1069.93
+177,Turkish Airlines,Jeddah,Doha,336,First,45,275.34
+178,Flynas,Doha,Mumbai,6188,First,78,2396.76
+179,Lufthansa,Cairo,Riyadh,6952,First,93,2601.86
+180,Flynas,Istanbul,Jeddah,695,First,75,395.88
+181,Flynas,London,Cairo,8149,Economy,105,912.09
+182,Emirates,Riyadh,Istanbul,8765,Economy,39,1486.51
+183,Turkish Airlines,Istanbul,Mumbai,11903,Economy,41,2026.29
+184,British Airways,New York,London,903,First,52,614.55
+185,Emirates,Paris,Riyadh,11720,Business,45,4168.67
+186,Flynas,Jeddah,Riyadh,2829,Business,117,821.38
+187,Turkish Airlines,Doha,New York,2609,First,31,1767.21
+188,Lufthansa,London,Dubai,11323,Business,100,2737.17
+189,Lufthansa,Cairo,Mumbai,543,First,54,425.98
+190,British Airways,Doha,Jeddah,10590,First,30,6803.82
+191,Etihad,Istanbul,Mumbai,7130,Business,72,2026.24
+192,Lufthansa,Istanbul,Paris,807,Economy,85,160.57
+193,British Airways,Paris,Istanbul,7993,Economy,55,1204.97
+194,Qatar Airways,Dubai,Doha,1647,First,70,804.6
+195,Qatar Airways,New York,Cairo,3900,Economy,3,916.82
+196,Qatar Airways,Dubai,New York,1891,First,76,869.1
+197,Emirates,Istanbul,Riyadh,3578,First,104,1495.68
+198,Flynas,London,Riyadh,8465,Economy,13,1775.34
+199,Lufthansa,Paris,New York,9628,Economy,31,1825.15
+200,Etihad,Paris,Doha,6019,First,106,2247.61
+201,Flynas,Riyadh,New York,11551,Economy,109,1374.01
+202,Lufthansa,Riyadh,Dubai,11626,Economy,68,1537.27
+203,British Airways,London,Istanbul,637,Business,115,278.66
+204,British Airways,Riyadh,New York,2639,First,54,1414.68
+205,Emirates,Mumbai,Paris,623,Business,58,293.77
+206,Flynas,Riyadh,Mumbai,1531,Business,102,547.91
+207,Emirates,Istanbul,New York,444,Business,93,248.52
+208,British Airways,Cairo,Doha,10371,Economy,101,1268.99
+209,British Airways,London,Cairo,966,Economy,4,361.61
+210,Etihad,New York,Cairo,11384,Economy,11,2472.36
+211,Turkish Airlines,Cairo,Dubai,3045,First,98,1226.63
+212,Flynas,Riyadh,Mumbai,3843,First,81,1494.54
+213,British Airways,Doha,Istanbul,6355,Business,90,1616.61
+214,Flynas,Istanbul,Cairo,6704,Business,64,2040.9
+215,Emirates,Istanbul,Mumbai,2605,First,37,1615.37
+216,Saudia,Paris,Riyadh,11094,First,85,4174.01
+217,Etihad,Dubai,New York,4002,Business,75,1066.93
+218,Turkish Airlines,Riyadh,Cairo,10682,Economy,5,2392.27
+219,Emirates,Istanbul,Mumbai,11228,First,37,6845.55
+220,Lufthansa,Doha,Cairo,1463,First,32,1073.36
+221,Turkish Airlines,Jeddah,Paris,636,First,67,372.85
+222,Emirates,Cairo,New York,8903,Economy,106,1120.52
+223,Emirates,Paris,Dubai,10595,Economy,101,1298.37
+224,Turkish Airlines,Doha,Dubai,6204,Business,91,1501.05
+225,Turkish Airlines,Riyadh,Paris,9699,First,34,6071.56
+226,British Airways,Paris,Dubai,2224,First,84,1005.86
+227,Lufthansa,Cairo,Riyadh,5792,Economy,50,968.12
+228,Flynas,Jeddah,Riyadh,9316,Economy,60,1315.64
+229,Turkish Airlines,London,Paris,9280,Business,61,2854.75
+230,Qatar Airways,Doha,Riyadh,376,Business,48,281.79
+231,Qatar Airways,London,Mumbai,11153,First,1,8852.69
+232,Turkish Airlines,Doha,Cairo,4307,Business,114,1091.12
+233,Emirates,Paris,Doha,4278,Business,43,1610.66
+234,British Airways,London,Cairo,7886,Economy,25,1594.79
+235,Saudia,Riyadh,Jeddah,5058,First,65,2398.78
+236,Turkish Airlines,Mumbai,Istanbul,9840,Economy,4,2322.56
+237,Lufthansa,New York,Riyadh,7370,Business,102,1783.66
+238,Saudia,Mumbai,New York,4433,Economy,76,562.73
+239,Flynas,Mumbai,Riyadh,10724,First,31,6895.45
+240,Turkish Airlines,Mumbai,Istanbul,6955,Business,7,3467.59
+241,Saudia,Istanbul,Doha,3516,Economy,6,875.76
+242,British Airways,Jeddah,Paris,2551,First,34,1686.46
+243,Lufthansa,London,Istanbul,7175,Business,79,1835.17
+244,Flynas,London,Riyadh,7406,Business,34,2915.5
+245,Etihad,Istanbul,Cairo,6420,Economy,37,1167.88
+246,Qatar Airways,Cairo,Paris,2389,First,33,1513.01
+247,Turkish Airlines,Dubai,Paris,6941,First,36,4298.76
+248,Saudia,Doha,London,7396,Business,34,3008.26
+249,Lufthansa,Riyadh,Istanbul,8028,Business,58,2540.92
+250,Emirates,Paris,New York,11507,Economy,72,1525.2

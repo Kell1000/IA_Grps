@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse Statistique CSV Pro</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/@sgratzl/chartjs-chart-boxplot@3.6.0/build/index.umd.min.js"></script>
+    <!-- BoxPlot Plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@1.1.0/dist/chartjs-chart-matrix.min.js"></script>
+    <!-- Heatmap Plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+    <style>
+        :root {
+            /* Light Theme */
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --accent-color: #6366f1;
+            /* Indigo 500 */
+            --accent-hover: #4f46e5;
+            --border-color: #e2e8f0;
+            --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.5);
+        }
+
+        [data-theme="dark"] {
+            /* Dark Theme */
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent-color: #818cf8;
+            /* Indigo 400 */
+            --accent-hover: #6366f1;
+            --border-color: #334155;
+            --card-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.5);
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        /* --- Header --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-color), #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--bg-secondary);
+        }
+
+        /* --- Main Content --- */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* --- Upload Section --- */
+        .upload-section {
+            text-align: center;
+            padding: 4rem 2rem;
+            border: 2px dashed var(--border-color);
+            border-radius: 1rem;
+            background: var(--glass-bg);
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-section.dragover {
+            border-color: var(--accent-color);
+            background: rgba(99, 102, 241, 0.1);
+            transform: scale(1.01);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-10px);
+            }
+
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .btn-upload {
+            background: linear-gradient(135deg, var(--accent-color), #4f46e5);
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 2rem;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-upload:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px -1px rgba(99, 102, 241, 0.5);
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        /* --- Dashboard Grid --- */
+        .dashboard {
+            display: none;
+            /* Hidden by default */
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--accent-color);
+            padding-left: 1rem;
+        }
+
+        /* --- Variable Selector --- */
+        .variable-selector {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+            scrollbar-width: thin;
+        }
+
+        .variable-chip {
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 2rem;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .variable-chip.active {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        /* --- Stats Cards --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-color), #ec4899);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* --- Charts Flex Containers --- */
+        .chart-container-flex {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .chart-box {
+            background: var(--bg-secondary);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+            flex: 1 1 45%;
+            /* Default to 2 columns */
+            min-width: 400px;
+            min-height: 400px;
+            position: relative;
+        }
+
+        .chart-box.full-width {
+            flex: 1 1 100%;
+        }
+
+        /* --- Outliers --- */
+        .outliers-list {
+            list-style: none;
+            padding: 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .outlier-item {
+            display: inline-block;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            margin: 0.25rem;
+            font-size: 0.875rem;
+        }
+
+        /* --- Interpretation --- */
+        .interpretation-box {
+            background: rgba(99, 102, 241, 0.05);
+            /* Very light indigo */
+            border-left: 4px solid var(--accent-color);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        /* --- Footer --- */
+        footer {
+            margin-top: 4rem;
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            background: var(--bg-secondary);
+        }
+
+        .credits {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* --- Loader --- */
+        .loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            flex-direction: column;
+            color: white;
+        }
+
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--accent-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        h2,
+        h3,
+        h4 {
+            color: var(--text-primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .chart-box {
+                flex: 1 1 100%;
+                /* Stack on mobile */
+                min-width: 100%;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Loader -->
+    <div id="loader" class="loader-overlay">
+        <div class="loader"></div>
+        <p>Analyse en cours...</p>
+    </div>
+
+    <header>
+        <div class="logo">📊 Analyse Statistique CSV Pro</div>
+        <button class="theme-toggle" id="themeToggle" title="Changer le thème">
+            🌓 Mode
+        </button>
+    </header>
+
+    <main>
+        <!-- Section Upload -->
+        <div class="upload-section" id="dropZone">
+            <div class="upload-icon">📁</div>
+            <h2>Glissez-déposez votre fichier CSV ici</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">ou cliquez pour sélectionner un fichier</p>
+            <button class="btn-upload" onclick="document.getElementById('fileInput').click()">Choisir un
+                Fichier</button>
+            <input type="file" id="fileInput" accept=".csv" onchange="handleFileSelect(event)">
+            <p id="fileName" style="margin-top: 1rem; font-weight: 500; display:none;"></p>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="dashboard">
+
+            <!-- Global Info -->
+            <div class="stat-card" style="grid-column: 1 / -1; text-align: center;">
+                <h3>Résumé Global</h3>
+                <p id="globalSummary">Lignes: 0 | Colonnes: 0</p>
+            </div>
+
+            <!-- Variable Selector -->
+            <div>
+                <h3 class="section-title">Analyse Détaillée par Variable</h3>
+                <div class="variable-selector" id="variableSelector">
+                    <!-- Dynamic Chips -->
+                </div>
+            </div>
+
+            <!-- Single Variable Analysis (Dynamic Section) -->
+            <div id="singleVarAnalysis">
+                <h3 id="currentVariableTitle" class="section-title">Sélectionnez une variable ci-dessus</h3>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Moyenne</div>
+                        <div class="stat-value" id="valMean">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Médiane</div>
+                        <div class="stat-value" id="valMedian">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Mode</div>
+                        <div class="stat-value" id="valMode">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Écart-Type</div>
+                        <div class="stat-value" id="valStdDev">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Min / Max</div>
+                        <div class="stat-value" id="valMinMax">-</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Outliers (IQR)</div>
+                        <div class="stat-value" id="valOutliersCount">-</div>
+                    </div>
+                </div>
+
+                <!-- Interpretation -->
+                <div id="interpretation" class="interpretation-box">
+                    Chargement de l'interprétation...
+                </div>
+
+                <!-- Charts Row 1: Histogram & BoxPlot -->
+                <div class="chart-container-flex">
+                    <div class="chart-box">
+                        <h4>Histogramme & Distribution</h4>
+                        <canvas id="histogramChart"></canvas>
+                    </div>
+                    <div class="chart-box">
+                        <h4>Box Plot (Boîte à Moustaches)</h4>
+                        <canvas id="boxPlotChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Multi Variable Analysis -->
+            <div>
+                <h3 class="section-title">Analyse Multivariée & Corrélations</h3>
+
+                <div class="chart-container-flex">
+                    <!-- Correlation Matrix -->
+                    <div class="chart-box full-width">
+                        <h4>Matrice de Corrélation (Heatmap)</h4>
+                        <div style="height: 500px; width: 100%;">
+                            <canvas id="correlationChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scatter Matrix (First 3 vars) -->
+                <div class="chart-container-flex" id="scatterMatrixContainer">
+                    <!-- Dynamic Scatter Plots -->
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Analyse Statistique CSV Pro. Tous droits réservés.</p>
+        <p class="credits">Produit par Brahim Halali & Mouhcine Akerzoul</p>
+    </footer>
+
+    <!-- Logic Script -->
+    <script>
+        // --- State ---
+        let rawData = [];
+        let numericColumns = [];
+        let currentVariableIndex = 0;
+        let chartInstances = {};
+
+        // --- DOM Elements ---
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const dashboard = document.getElementById('dashboard');
+        const loader = document.getElementById('loader');
+
+        // --- Theme Toggle ---
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            themeToggle.innerHTML = newTheme === 'dark' ? '🌓 Mode' : '☀️ Mode';
+
+            // Re-render charts to update colors
+            if (rawData.length > 0) renderAllCharts();
+        });
+
+        // --- Drag & Drop ---
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file && file.name.endsWith('.csv')) processFile(file);
+            else alert("Veuillez uploader un fichier CSV valide.");
+        });
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) processFile(file);
+        }
+
+        // --- CSV Processing ---
+        function processFile(file) {
+            document.getElementById('fileName').style.display = 'block';
+            document.getElementById('fileName').textContent = `Fichier: ${file.name}`;
+            loader.style.display = 'flex';
+
+            Papa.parse(file, {
+                header: true,
+                dynamicTyping: true,
+                skipEmptyLines: true,
+                complete: function (results) {
+                    rawData = results.data;
+                    analyzeData();
+                    loader.style.display = 'none';
+                    dashboard.style.display = 'flex'; // Show dashboard
+
+                    // Scroll to dashboard
+                    setTimeout(() => {
+                        window.scrollTo({ top: document.querySelector('main').offsetTop + 200, behavior: 'smooth' });
+                    }, 500);
+                },
+                error: function (err) {
+                    alert('Erreur de lecture CSV: ' + err.message);
+                    loader.style.display = 'none';
+                }
+            });
+        }
+
+        // --- Data Analysis Logic ---
+        function analyzeData() {
+            if (!rawData.length) return;
+
+            const headers = Object.keys(rawData[0]);
+            numericColumns = [];
+
+            // Detect Numeric Columns
+            headers.forEach(header => {
+                const isNumeric = rawData.every(row => {
+                    const val = row[header];
+                    return val === null || val === "" || !isNaN(Number(val));
+                });
+                if (isNumeric) numericColumns.push(header);
+            });
+
+            if (numericColumns.length === 0) {
+                alert("Aucune colonne numérique détectée !");
+                return;
+            }
+
+            // Global Summary
+            document.getElementById('globalSummary').textContent =
+                `Lignes: ${rawData.length} | Colonnes: ${headers.length} | Numériques: ${numericColumns.length}`;
+
+            // Setup Variable Selector
+            setupVariableSelector();
+
+            // Initial Render
+            currentVariableIndex = 0;
+            updateDashboard();
+            renderGlobalCharts();
+        }
+
+        function setupVariableSelector() {
+            const container = document.getElementById('variableSelector');
+            container.innerHTML = '';
+
+            numericColumns.forEach((col, index) => {
+                const chip = document.createElement('div');
+                chip.className = `variable-chip ${index === 0 ? 'active' : ''}`;
+                chip.textContent = col;
+                chip.onclick = () => {
+                    document.querySelectorAll('.variable-chip').forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                    currentVariableIndex = index;
+                    updateDashboard();
+                };
+                container.appendChild(chip);
+            });
+        }
+
+        function updateDashboard() {
+            const colName = numericColumns[currentVariableIndex];
+            document.getElementById('currentVariableTitle').textContent = `Analyse de : ${colName}`;
+
+            const values = rawData.map(r => Number(r[colName])).filter(v => !isNaN(v));
+            values.sort((a, b) => a - b);
+
+            const stats = calculateStats(values);
+            displayStats(stats);
+            renderSpecificCharts(colName, values, stats);
+        }
+
+        function calculateStats(values) {
+            const n = values.length;
+            if (n === 0) return {};
+
+            const sum = values.reduce((a, b) => a + b, 0);
+            const mean = sum / n;
+            const median = n % 2 === 0 ? (values[n / 2 - 1] + values[n / 2]) / 2 : values[Math.floor(n / 2)];
+
+            // Mode
+            const frequency = {};
+            let maxFreq = 0;
+            let mode = [];
+            values.forEach(v => {
+                frequency[v] = (frequency[v] || 0) + 1;
+                if (frequency[v] > maxFreq) maxFreq = frequency[v];
+            });
+            for (const v in frequency) if (frequency[v] === maxFreq) mode.push(Number(v));
+
+            // Variance & StdDev
+            const variance = values.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / n;
+            const stdDev = Math.sqrt(variance);
+
+            // Quartiles
+            const q1 = values[Math.floor(n * 0.25)];
+            const q3 = values[Math.floor(n * 0.75)];
+            const iqr = q3 - q1;
+            const min = values[0];
+            const max = values[n - 1];
+
+            // Outliers
+            const lowerBound = q1 - 1.5 * iqr;
+            const upperBound = q3 + 1.5 * iqr;
+            const outliers = values.filter(v => v < lowerBound || v > upperBound);
+
+            return {
+                mean, median, mode,
+                min, max, stdDev,
+                q1, q3, iqr, outliers,
+                values
+            };
+        }
+
+        function displayStats(stats) {
+            const format = (n) => n.toLocaleString(undefined, { maximumFractionDigits: 2 });
+
+            document.getElementById('valMean').textContent = format(stats.mean);
+            document.getElementById('valMedian').textContent = format(stats.median);
+            document.getElementById('valMode').textContent = stats.mode.length > 5 ? 'Multiple' : stats.mode.join(', ');
+            document.getElementById('valStdDev').textContent = format(stats.stdDev);
+            document.getElementById('valMinMax').textContent = `${format(stats.min)} / ${format(stats.max)}`;
+            document.getElementById('valOutliersCount').textContent = stats.outliers.length;
+
+            // Interpretation
+            let text = "";
+            if (Math.abs(stats.mean - stats.median) < stats.stdDev * 0.1) text += "Moyenne ≈ Médiane : Distribution symétrique. ";
+            else if (stats.mean > stats.median) text += "Moyenne > Médiane : Asymétrie positive (étalement vers la droite). ";
+            else text += "Moyenne < Médiane : Asymétrie négative (étalement vers la gauche). ";
+
+            if (stats.outliers.length > 0) text += `<br>⚠️ Attention : ${stats.outliers.length} valeurs aberrantes détectées.`;
+
+            document.getElementById('interpretation').innerHTML = text;
+        }
+
+        // --- Chart Utilities ---
+        function getChartColors() {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            return {
+                text: isDark ? '#f1f5f9' : '#1e293b',
+                grid: isDark ? '#334155' : '#e2e8f0',
+                primary: isDark ? 'rgba(129, 140, 248, 0.6)' : 'rgba(99, 102, 241, 0.6)',
+                border: isDark ? '#818cf8' : '#6366f1'
+            };
+        }
+
+        function destroyChart(id) {
+            if (chartInstances[id]) {
+                chartInstances[id].destroy();
+                delete chartInstances[id];
+            }
+        }
+
+        // --- Specific Charts (Histogram, BoxPlot) ---
+        function renderSpecificCharts(label, values, stats) {
+            const colors = getChartColors();
+
+            // 1. Histogram
+            destroyChart('histogramChart');
+            const ctxHist = document.getElementById('histogramChart').getContext('2d');
+
+            // Create bins
+            const binCount = Math.ceil(Math.sqrt(values.length));
+            const binWidth = (stats.max - stats.min) / binCount;
+            const bins = new Array(binCount).fill(0);
+            const binLabels = new Array(binCount).fill(0);
+
+            values.forEach(v => {
+                const index = Math.min(Math.floor((v - stats.min) / binWidth), binCount - 1);
+                bins[index]++;
+            });
+
+            for (let i = 0; i < binCount; i++) {
+                binLabels[i] = (stats.min + i * binWidth).toFixed(1) + '-' + (stats.min + (i + 1) * binWidth).toFixed(1);
+            }
+
+            chartInstances['histogramChart'] = new Chart(ctxHist, {
+                type: 'bar',
+                data: {
+                    labels: binLabels,
+                    datasets: [{
+                        label: `Distribution de ${label}`,
+                        data: bins,
+                        backgroundColor: colors.primary,
+                        borderColor: colors.border,
+                        borderWidth: 1,
+                        borderRadius: 4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { labels: { color: colors.text } },
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: colors.text },
+                            grid: { color: colors.grid }
+                        },
+                        x: {
+                            ticks: { color: colors.text },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // 2. Box Plot
+            destroyChart('boxPlotChart');
+            const ctxBox = document.getElementById('boxPlotChart').getContext('2d');
+
+            chartInstances['boxPlotChart'] = new Chart(ctxBox, {
+                type: 'boxplot',
+                data: {
+                    labels: [label],
+                    datasets: [{
+                        label: 'Stats',
+                        backgroundColor: colors.primary,
+                        borderColor: colors.border,
+                        borderWidth: 1,
+                        outlierColor: '#ef4444',
+                        padding: 10,
+                        itemRadius: 3,
+                        data: [values] // The plugin handles raw data array
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { backgroundColor: 'rgba(0,0,0,0.8)' }
+                    },
+                    scales: {
+                        y: {
+                            ticks: { color: colors.text },
+                            grid: { color: colors.grid }
+                        },
+                        x: {
+                            ticks: { color: colors.text },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- Global Charts (Heatmap, Scatter) ---
+        function renderGlobalCharts() {
+            if (numericColumns.length < 2) return;
+            const colors = getChartColors();
+
+            // 1. Correlation Matrix
+            destroyChart('correlationChart');
+            const ctxCorr = document.getElementById('correlationChart').getContext('2d');
+
+            // Calculate Matrix
+            const matrixData = [];
+            for (let i = 0; i < numericColumns.length; i++) {
+                for (let j = 0; j < numericColumns.length; j++) {
+                    const colX = rawData.map(r => Number(r[numericColumns[i]]) || 0);
+                    const colY = rawData.map(r => Number(r[numericColumns[j]]) || 0);
+                    const correlation = calculateCorrelation(colX, colY);
+
+                    matrixData.push({
+                        x: numericColumns[i],
+                        y: numericColumns[j],
+                        v: correlation
+                    });
+                }
+            }
+
+            chartInstances['correlationChart'] = new Chart(ctxCorr, {
+                type: 'matrix',
+                data: {
+                    datasets: [{
+                        label: 'Corrélation',
+                        data: matrixData,
+                        backgroundColor(context) {
+                            const value = context.dataset.data[context.dataIndex].v;
+                            // Color scale from -1 (Red) to 0 (White) to 1 (Blue/Indigo)
+                            const alpha = Math.abs(value);
+                            return value > 0
+                                ? `rgba(99, 102, 241, ${alpha})`
+                                : `rgba(239, 68, 68, ${alpha})`;
+                        },
+                        borderColor: colors.grid,
+                        borderWidth: 1,
+                        width: ({ chart }) => (chart.chartArea || {}).width / numericColumns.length - 1,
+                        height: ({ chart }) => (chart.chartArea || {}).height / numericColumns.length - 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => `Corr: ${ctx.raw.v.toFixed(2)}`
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'category',
+                            labels: numericColumns,
+                            ticks: { color: colors.text, autoSkip: false, maxRotation: 90 },
+                            grid: { display: false }
+                        },
+                        y: {
+                            type: 'category',
+                            labels: numericColumns,
+                            offset: true,
+                            ticks: { color: colors.text },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // 2. Scatter Matrix (Limit to first 3 columns for 3x3 grid max to avoid overload)
+            const scatterContainer = document.getElementById('scatterMatrixContainer');
+            scatterContainer.innerHTML = ''; // Clear previous
+
+            const limit = Math.min(numericColumns.length, 4); // Limit to 4x4 max
+            for (let i = 0; i < limit; i++) {
+                for (let j = 0; j < limit; j++) {
+                    if (i === j) continue; // Skip diagonal or put histogram? Skip for now.
+
+                    const colNameX = numericColumns[i];
+                    const colNameY = numericColumns[j];
+
+                    const div = document.createElement('div');
+                    div.className = 'chart-box';
+                    div.style.minWidth = "300px"; // Smaller for matrix
+                    div.innerHTML = `<h4>${colNameX} vs ${colNameY}</h4><canvas id="scatter_${i}_${j}"></canvas>`;
+                    scatterContainer.appendChild(div);
+
+                    const ctxScatter = div.querySelector('canvas').getContext('2d');
+
+                    // Prepare data (downsample if too huge)
+                    const scatterData = rawData
+                        .map(r => ({ x: Number(r[colNameX]), y: Number(r[colNameY]) }))
+                        .filter(p => !isNaN(p.x) && !isNaN(p.y))
+                        .slice(0, 500); // Limit points for performance
+
+                    new Chart(ctxScatter, {
+                        type: 'scatter',
+                        data: {
+                            datasets: [{
+                                label: 'Points',
+                                data: scatterData,
+                                backgroundColor: colors.border
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: { legend: { display: false } },
+                            scales: {
+                                x: { title: { display: true, text: colNameX } },
+                                y: { title: { display: true, text: colNameY } }
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
+        // Pearson Correlation
+        function calculateCorrelation(x, y) {
+            const n = x.length;
+            const sumX = x.reduce((a, b) => a + b, 0);
+            const sumY = y.reduce((a, b) => a + b, 0);
+            const sumXY = x.reduce((sum, xi, i) => sum + xi * y[i], 0);
+            const sumX2 = x.reduce((sum, xi) => sum + xi * xi, 0);
+            const sumY2 = y.reduce((sum, yi) => sum + yi * yi, 0);
+
+            const numerator = (n * sumXY) - (sumX * sumY);
+            const denominator = Math.sqrt(((n * sumX2) - (sumX * sumX)) * ((n * sumY2) - (sumY * sumY)));
+
+            return denominator === 0 ? 0 : numerator / denominator;
+        }
+
+        // Trigger Render All Charts on Theme Change
+        function renderAllCharts() {
+            if (chartInstances['histogramChart']) {
+                updateDashboard();
+                renderGlobalCharts();
+            }
+        }
+
+    </script>
+</body>
+
+</html>

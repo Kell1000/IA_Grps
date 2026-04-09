@@ -1,0 +1,2333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MathLab — Math for Data Science & AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* ===== CSS VARIABLES & RESET ===== */
+:root {
+  --bg: #0a0e1a;
+  --bg2: #0f1525;
+  --bg3: #151d35;
+  --card: #111827;
+  --border: #1e2d4a;
+  --accent: #00d4ff;
+  --accent2: #7c3aed;
+  --accent3: #10b981;
+  --accent4: #f59e0b;
+  --danger: #ef4444;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #475569;
+  --glow: 0 0 20px rgba(0,212,255,0.15);
+  --glow2: 0 0 20px rgba(124,58,237,0.2);
+  --radius: 12px;
+  --mono: 'Space Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
+  --serif: 'DM Serif Display', serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg2); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* ===== LAYOUT ===== */
+.app { display: flex; min-height: 100vh; }
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width: 260px;
+  min-height: 100vh;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  z-index: 100;
+  transition: transform .3s ease;
+}
+
+.sidebar-logo {
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.logo-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: linear-gradient(135deg, rgba(0,212,255,.15), rgba(124,58,237,.15));
+  border: 1px solid rgba(0,212,255,.3);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.logo-title {
+  font-family: var(--serif);
+  font-size: 22px;
+  color: var(--text);
+  line-height: 1.2;
+}
+.logo-sub { font-size: 11px; color: var(--text2); margin-top: 2px; font-family: var(--mono); }
+
+/* XP Bar */
+.xp-section {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.xp-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.xp-label { font-size: 11px; color: var(--text2); font-family: var(--mono); letter-spacing: .05em; }
+.xp-value { font-size: 12px; color: var(--accent); font-family: var(--mono); font-weight: 700; }
+.xp-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.xp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+  transition: width .6s ease;
+}
+.level-badge {
+  display: flex; align-items: center; gap: 6px; margin-top: 8px;
+  font-size: 12px; color: var(--accent4);
+}
+.level-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent4); }
+
+/* Nav */
+.nav-section { flex: 1; overflow-y: auto; padding: 12px 0; }
+.nav-group-label {
+  padding: 12px 20px 4px;
+  font-size: 10px;
+  color: var(--text3);
+  font-family: var(--mono);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 20px;
+  cursor: pointer;
+  transition: all .2s;
+  border-left: 3px solid transparent;
+  font-size: 13.5px;
+  color: var(--text2);
+  user-select: none;
+}
+.nav-item:hover { background: rgba(255,255,255,.04); color: var(--text); }
+.nav-item.active {
+  background: rgba(0,212,255,.08);
+  border-left-color: var(--accent);
+  color: var(--accent);
+}
+.nav-item .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+.nav-item .nav-badge {
+  margin-left: auto;
+  background: var(--accent2);
+  color: white;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-family: var(--mono);
+}
+.nav-item .nav-check {
+  margin-left: auto;
+  color: var(--accent3);
+  font-size: 14px;
+}
+
+/* ===== MAIN CONTENT ===== */
+.main {
+  margin-left: 260px;
+  flex: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== TOP BAR ===== */
+.topbar {
+  padding: 16px 32px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 16px;
+  background: var(--bg2);
+  position: sticky; top: 0; z-index: 50;
+}
+.topbar-title { font-family: var(--serif); font-size: 20px; flex: 1; }
+.streak-badge {
+  display: flex; align-items: center; gap: 5px;
+  background: rgba(245,158,11,.12);
+  border: 1px solid rgba(245,158,11,.3);
+  color: var(--accent4);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-family: var(--mono);
+}
+.badges-row { display: flex; gap: 6px; }
+.badge-item {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  cursor: help;
+  transition: transform .2s;
+}
+.badge-item:hover { transform: scale(1.2); }
+.badge-item.unlocked { background: rgba(0,212,255,.1); border-color: var(--accent); }
+
+/* ===== PAGES ===== */
+.page { display: none; flex: 1; padding: 32px; animation: fadeIn .3s ease; }
+.page.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* ===== HOME PAGE ===== */
+.hero {
+  background: linear-gradient(135deg, rgba(0,212,255,.08) 0%, rgba(124,58,237,.08) 100%);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 48px;
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: 'Σ π √ ∫ μ σ';
+  position: absolute; top: -10px; right: 20px;
+  font-family: var(--mono); font-size: 80px;
+  color: rgba(0,212,255,.05);
+  pointer-events: none; user-select: none;
+  letter-spacing: 10px;
+}
+.hero h1 {
+  font-family: var(--serif);
+  font-size: 40px; line-height: 1.1;
+  max-width: 500px; margin-bottom: 16px;
+}
+.hero h1 em { color: var(--accent); font-style: normal; }
+.hero p { color: var(--text2); max-width: 480px; line-height: 1.6; margin-bottom: 24px; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: var(--sans); font-size: 14px; font-weight: 500;
+  cursor: pointer; border: none; text-decoration: none;
+  transition: all .2s;
+}
+.btn-primary {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 20px rgba(0,212,255,.3);
+}
+.btn-primary:hover { background: #00e8ff; box-shadow: 0 0 30px rgba(0,212,255,.5); }
+.btn-secondary {
+  background: transparent;
+  color: var(--text2);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+.modules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.module-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  cursor: pointer;
+  transition: all .25s;
+  position: relative;
+  overflow: hidden;
+}
+.module-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--card-accent, var(--accent));
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.module-card:hover {
+  border-color: var(--card-accent, var(--accent));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0,0,0,.3);
+}
+.module-icon { font-size: 28px; margin-bottom: 12px; }
+.module-title { font-weight: 700; margin-bottom: 4px; font-size: 15px; }
+.module-desc { font-size: 13px; color: var(--text2); line-height: 1.5; margin-bottom: 12px; }
+.module-meta {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 11px; font-family: var(--mono); color: var(--text3);
+}
+.module-progress { height: 3px; background: var(--border); border-radius: 2px; margin-top: 12px; }
+.module-progress-fill { height: 100%; border-radius: 2px; background: var(--card-accent, var(--accent)); transition: width .6s; }
+
+/* ===== SECTION HEADERS ===== */
+.section-header { margin-bottom: 20px; }
+.section-header h2 { font-family: var(--serif); font-size: 26px; margin-bottom: 4px; }
+.section-header p { color: var(--text2); font-size: 14px; }
+.section-tag {
+  display: inline-block;
+  background: rgba(0,212,255,.1);
+  border: 1px solid rgba(0,212,255,.2);
+  color: var(--accent);
+  font-size: 10px; font-family: var(--mono); letter-spacing: .08em;
+  padding: 2px 8px; border-radius: 20px; margin-bottom: 8px;
+}
+
+/* ===== TABS ===== */
+.tab-bar {
+  display: flex; gap: 4px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 24px;
+}
+.tab-btn {
+  padding: 7px 16px;
+  border-radius: 7px;
+  font-size: 13px;
+  cursor: pointer;
+  border: none; background: transparent;
+  color: var(--text2); font-family: var(--sans);
+  transition: all .2s;
+}
+.tab-btn.active { background: var(--bg3); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; animation: fadeIn .2s ease; }
+
+/* ===== MATRIX CALCULATOR ===== */
+.matrix-section { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+.matrix-box {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+.matrix-box h4 { font-size: 12px; font-family: var(--mono); color: var(--text2); margin-bottom: 12px; letter-spacing: .05em; }
+.matrix-grid { display: grid; gap: 6px; }
+.matrix-grid input {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  text-align: center;
+  padding: 6px;
+  border-radius: 6px;
+  font-family: var(--mono);
+  font-size: 14px;
+  width: 100%;
+  transition: border-color .2s;
+}
+.matrix-grid input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px rgba(0,212,255,.1); }
+.op-buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.op-btn {
+  padding: 7px 14px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  border-radius: 7px;
+  font-family: var(--mono);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.op-btn:hover { border-color: var(--accent); color: var(--accent); }
+.op-btn.active { background: rgba(0,212,255,.1); border-color: var(--accent); color: var(--accent); }
+.result-box {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+.result-title { font-size: 11px; font-family: var(--mono); color: var(--text2); margin-bottom: 12px; letter-spacing: .05em; }
+.result-display {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--accent);
+  min-height: 80px;
+  white-space: pre;
+  line-height: 1.8;
+}
+.step-by-step {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-top: 12px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.7;
+}
+.step { display: flex; gap: 10px; margin-bottom: 6px; }
+.step-num {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(0,212,255,.15); color: var(--accent);
+  font-size: 10px; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+.highlight { color: var(--accent4); }
+
+/* ===== PROBABILITY SIMULATOR ===== */
+.sim-controls {
+  display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end;
+  margin-bottom: 20px;
+}
+.control-group { display: flex; flex-direction: column; gap: 6px; }
+.control-label { font-size: 11px; font-family: var(--mono); color: var(--text2); letter-spacing: .05em; }
+.control-input {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-family: var(--mono);
+  font-size: 14px;
+  width: 120px;
+  transition: border-color .2s;
+}
+.control-input:focus { outline: none; border-color: var(--accent); }
+.range-input { -webkit-appearance: none; width: 160px; height: 4px; background: var(--border); border-radius: 2px; border: none; padding: 0; }
+.range-input::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 14px; height: 14px;
+  background: var(--accent); border-radius: 50%; cursor: pointer;
+}
+.canvas-wrap {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+canvas { display: block; max-width: 100%; }
+.sim-stats {
+  display: flex; gap: 16px; flex-wrap: wrap; margin-top: 12px;
+}
+.stat-pill {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-family: var(--mono);
+  font-size: 12px;
+}
+.stat-pill span { color: var(--accent); font-weight: 700; }
+
+/* ===== NORMALIZATION DEMO ===== */
+.data-input-row {
+  display: flex; gap: 8px; align-items: center; margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.data-chip {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-family: var(--mono);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.data-chip:hover { border-color: var(--danger); }
+.data-chip.selected { background: rgba(0,212,255,.1); border-color: var(--accent); color: var(--accent); }
+.norm-table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 13px; }
+.norm-table th {
+  text-align: left; padding: 8px 12px;
+  font-size: 10px; letter-spacing: .08em; color: var(--text3);
+  border-bottom: 1px solid var(--border);
+}
+.norm-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(30,45,74,.5);
+}
+.norm-table tr:last-child td { border-bottom: none; }
+.norm-table .val-original { color: var(--text); }
+.norm-table .val-minmax { color: var(--accent); }
+.norm-table .val-zscore { color: var(--accent4); }
+.norm-bar { height: 4px; background: var(--border); border-radius: 2px; margin-top: 4px; position: relative; }
+.norm-bar-fill { height: 100%; border-radius: 2px; transition: width .5s; }
+
+/* ===== QUIZ ===== */
+.quiz-question {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.quiz-q-text { font-size: 16px; margin-bottom: 16px; line-height: 1.6; }
+.quiz-q-formula {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--accent);
+  margin-bottom: 16px;
+  text-align: center;
+}
+.quiz-options { display: flex; flex-direction: column; gap: 8px; }
+.quiz-option {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all .2s;
+  display: flex; align-items: center; gap: 10px;
+}
+.quiz-option:hover { border-color: var(--accent); background: rgba(0,212,255,.05); }
+.quiz-option.correct { border-color: var(--accent3); background: rgba(16,185,129,.1); color: var(--accent3); }
+.quiz-option.wrong { border-color: var(--danger); background: rgba(239,68,68,.1); color: var(--danger); }
+.quiz-option.disabled { pointer-events: none; }
+.quiz-feedback {
+  margin-top: 16px; padding: 12px 16px;
+  border-radius: 8px; font-size: 14px; line-height: 1.5;
+  display: none;
+}
+.quiz-feedback.correct { background: rgba(16,185,129,.1); border: 1px solid rgba(16,185,129,.3); color: var(--accent3); }
+.quiz-feedback.wrong { background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3); color: #fca5a5; }
+.quiz-progress {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+  font-size: 13px; font-family: var(--mono);
+}
+.quiz-score { color: var(--accent3); font-weight: 700; }
+.quiz-dots { display: flex; gap: 4px; }
+.quiz-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); }
+.quiz-dot.done { background: var(--accent3); }
+.quiz-dot.current { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+.quiz-dot.wrong-dot { background: var(--danger); }
+
+/* ===== CORRELATION DEMO ===== */
+.scatter-controls { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
+
+/* ===== STATS CARDS ===== */
+.stats-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+.stat-card-label { font-size: 10px; font-family: var(--mono); color: var(--text3); letter-spacing: .08em; margin-bottom: 6px; }
+.stat-card-value { font-family: var(--mono); font-size: 20px; color: var(--accent); font-weight: 700; }
+.stat-card-sub { font-size: 11px; color: var(--text3); margin-top: 4px; }
+
+/* ===== CONCEPT EXPLANATION ===== */
+.concept-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.concept-title { font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.concept-body { font-size: 14px; color: var(--text2); line-height: 1.7; }
+.formula-block {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--accent4);
+  margin: 10px 0;
+  text-align: center;
+  letter-spacing: .03em;
+}
+.concept-visual {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 12px;
+  overflow-x: auto;
+}
+
+/* ===== PROGRESS PAGE ===== */
+.progress-header {
+  background: linear-gradient(135deg, rgba(124,58,237,.12), rgba(0,212,255,.08));
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 24px;
+  display: flex; align-items: center; gap: 24px;
+}
+.progress-avatar {
+  width: 72px; height: 72px;
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; flex-shrink: 0;
+}
+.progress-user-title { font-family: var(--serif); font-size: 24px; margin-bottom: 4px; }
+.progress-user-sub { color: var(--text2); font-size: 13px; }
+.badges-section { margin-bottom: 24px; }
+.badges-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; }
+.badge-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  text-align: center;
+  transition: all .2s;
+}
+.badge-card.unlocked { border-color: var(--accent4); background: rgba(245,158,11,.07); }
+.badge-card:hover { transform: translateY(-2px); }
+.badge-emoji { font-size: 28px; margin-bottom: 6px; }
+.badge-name { font-size: 11px; color: var(--text2); }
+.badge-card.locked .badge-emoji { filter: grayscale(1) opacity(.3); }
+.badge-card.locked .badge-name { color: var(--text3); }
+
+.module-progress-list { display: flex; flex-direction: column; gap: 10px; }
+.module-prog-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  display: flex; align-items: center; gap: 14px;
+}
+.module-prog-icon { font-size: 22px; }
+.module-prog-info { flex: 1; }
+.module-prog-name { font-weight: 500; margin-bottom: 4px; }
+.module-prog-bar { height: 4px; background: var(--border); border-radius: 2px; }
+.module-prog-fill { height: 100%; border-radius: 2px; transition: width .6s; }
+.module-prog-pct { font-family: var(--mono); font-size: 12px; color: var(--text2); flex-shrink: 0; }
+
+/* ===== RESPONSIVE ===== */
+@media(max-width: 768px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: none; }
+  .main { margin-left: 0; }
+  .matrix-section { grid-template-columns: 1fr; }
+  .hero { padding: 24px; }
+  .hero h1 { font-size: 28px; }
+}
+
+/* ===== TOOLTIP ===== */
+.tooltip { position: relative; display: inline-flex; }
+.tooltip::after {
+  content: attr(data-tip);
+  position: absolute; bottom: calc(100% + 6px); left: 50%;
+  transform: translateX(-50%) scale(.9);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  font-size: 11px; padding: 5px 10px; border-radius: 6px;
+  white-space: nowrap; pointer-events: none;
+  opacity: 0; transition: all .15s;
+}
+.tooltip:hover::after { opacity: 1; transform: translateX(-50%) scale(1); }
+
+/* ===== NOTIFICATION TOAST ===== */
+.toast {
+  position: fixed; bottom: 24px; right: 24px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  font-size: 14px; max-width: 300px;
+  transform: translateY(80px); opacity: 0;
+  transition: all .3s ease;
+  z-index: 1000;
+  display: flex; align-items: center; gap: 10px;
+}
+.toast.show { transform: none; opacity: 1; }
+.toast.success { border-color: var(--accent3); }
+.toast.info { border-color: var(--accent); }
+
+/* ===== CONCEPT INTRO ANIMATION ===== */
+.float-symbol {
+  position: fixed; pointer-events: none; user-select: none;
+  font-family: var(--mono);
+  color: rgba(0,212,255,.03);
+  animation: floatUp linear infinite;
+}
+@keyframes floatUp {
+  0% { opacity: 0; transform: translateY(0); }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-100vh); }
+}
+</style>
+</head>
+<body>
+
+<!-- Floating math symbols background -->
+<div id="float-bg"></div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast">
+  <span id="toast-icon">✓</span>
+  <span id="toast-msg">Achievement unlocked!</span>
+</div>
+
+<div class="app">
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-badge">⚗️ MathLab</div>
+      <div class="logo-title">Math for<br>Data Science</div>
+      <div class="logo-sub">// AI & ML Foundations</div>
+    </div>
+
+    <div class="xp-section">
+      <div class="xp-header">
+        <span class="xp-label">EXPERIENCE</span>
+        <span class="xp-value" id="xp-display">0 / 500 XP</span>
+      </div>
+      <div class="xp-bar"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div>
+      <div class="level-badge"><div class="level-dot"></div><span id="level-label">Level 1 — Apprentice</span></div>
+    </div>
+
+    <nav class="nav-section">
+      <div class="nav-group-label">START HERE</div>
+      <div class="nav-item active" onclick="navigate('home')">
+        <span class="nav-icon">🏠</span> Dashboard
+      </div>
+
+      <div class="nav-group-label">LINEAR ALGEBRA</div>
+      <div class="nav-item" onclick="navigate('vectors')">
+        <span class="nav-icon">➡️</span> Vectors
+      </div>
+      <div class="nav-item" onclick="navigate('matrices')">
+        <span class="nav-icon">🔢</span> Matrices
+        <span class="nav-badge">TOOL</span>
+      </div>
+
+      <div class="nav-group-label">STATISTICS</div>
+      <div class="nav-item" onclick="navigate('probability')">
+        <span class="nav-icon">🎲</span> Probability
+        <span class="nav-badge">SIM</span>
+      </div>
+      <div class="nav-item" onclick="navigate('descriptive')">
+        <span class="nav-icon">📊</span> Descriptive Stats
+      </div>
+      <div class="nav-item" onclick="navigate('distributions')">
+        <span class="nav-icon">📈</span> Distributions
+      </div>
+      <div class="nav-item" onclick="navigate('correlation')">
+        <span class="nav-icon">🔗</span> Correlation
+        <span class="nav-badge">VIZ</span>
+      </div>
+
+      <div class="nav-group-label">DATA PREPROCESSING</div>
+      <div class="nav-item" onclick="navigate('normalization')">
+        <span class="nav-icon">⚖️</span> Normalization
+        <span class="nav-badge">DEMO</span>
+      </div>
+
+      <div class="nav-group-label">PRACTICE</div>
+      <div class="nav-item" onclick="navigate('quiz')">
+        <span class="nav-icon">🧠</span> Quiz Arena
+      </div>
+      <div class="nav-item" onclick="navigate('progress')">
+        <span class="nav-icon">🏆</span> My Progress
+      </div>
+    </nav>
+  </aside>
+
+  <!-- ===== MAIN ===== -->
+  <main class="main">
+    <div class="topbar">
+      <div class="topbar-title" id="page-title">Dashboard</div>
+      <div class="streak-badge">🔥 <span id="streak-count">0</span> day streak</div>
+      <div class="badges-row" id="top-badges"></div>
+    </div>
+
+    <!-- HOME PAGE -->
+    <div class="page active" id="page-home">
+      <div class="hero">
+        <h1>Master the <em>Math</em> behind AI & Data Science</h1>
+        <p>Interactive lessons, visualizations, and exercises covering everything from vectors to probability distributions — built for beginners.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn btn-primary" onclick="navigate('matrices')">🚀 Start Learning</button>
+          <button class="btn btn-secondary" onclick="navigate('quiz')">🧠 Take a Quiz</button>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <div class="section-tag">CURRICULUM</div>
+        <h2>Learning Modules</h2>
+        <p>8 modules covering essential math for machine learning</p>
+      </div>
+
+      <div class="modules-grid">
+        <div class="module-card" style="--card-accent:#00d4ff" onclick="navigate('vectors')">
+          <div class="module-icon">➡️</div>
+          <div class="module-title">Vectors</div>
+          <div class="module-desc">Dot products, magnitude, direction, and geometric intuition in 2D/3D space.</div>
+          <div class="module-meta"><span>6 lessons</span><span>•</span><span>~30 min</span></div>
+          <div class="module-progress"><div class="module-progress-fill" id="prog-vectors" style="width:0%"></div></div>
+        </div>
+        <div class="module-card" style="--card-accent:#7c3aed" onclick="navigate('matrices')">
+          <div class="module-icon">🔢</div>
+          <div class="module-title">Matrices</div>
+          <div class="module-desc">Operations, multiplication, transpose, inverse, determinant — with a live calculator.</div>
+          <div class="module-meta"><span>8 lessons</span><span>•</span><span>~45 min</span></div>
+          <div class="module-progress"><div class="module-progress-fill" id="prog-matrices" style="width:0%"></div></div>
+        </div>
+        <div class="module-card" style="--card-accent:#f59e0b" onclick="navigate('probability')">
+          <div class="module-icon">🎲</div>
+          <div class="module-title">Probability</div>
+          <div class="module-desc">Events, conditional probability, Bayes' theorem with interactive simulators.</div>
+          <div class="module-meta"><span>7 lessons</span><span>•</span><span>~40 min</span></div>
+          <div class="module-progress"><div class="module-progress-fill" id="prog-probability" style="width:0%"></div></div>
+        </div>
+        <div class="module-card" style="--card-accent:#10b981" onclick="navigate('descriptive')">
+          <div class="module-icon">📊</div>
+          <div class="module-title">Descriptive Stats</div>
+          <div class="module-desc">Mean, median, variance, standard deviation with live data exploration.</div>
+          <div class="module-meta"><span>5 lessons</span><span>•</span><span>~25 min</span></div>
+          <div class="module-progress"><div class="module-progress-fill" id="prog-descriptive" style="width:0%"></div></div>
+        </div>
+        <div class="module-card" style="--card-accent:#ec4899" onclick="navigate('distributions')">
+          <div class="module-icon">📈</div>
+          <div class="module-title">Distributions</div>
+          <div class="module-desc">Normal, uniform, binomial distributions — visualize shape, mean, and variance.</div>
+          <div class="module-meta"><span>6 lessons</span><span>•</span><span>~35 min</span></div>
+          <div class="module-progress"><div class="module-progress-fill" id="prog-distributions" style="width:0%"></div></div>
+        </div>
+        <div class="module-card" style="--card-accent:#06b6d4" onclick="navigate('correlation')">
+          <div class="module-icon">🔗</div>
+          <div class="module-title">Correlation</div>
+          <div class="module-desc">Pearson's r, scatter plots, covariance — essential for feature selection.</div>
+          <div class="module-meta"><span>4 lessons</span><span>•</span><span>~20 min</span></div>
+          <div class="module-progress"><div class="module-progress-fill" id="prog-correlation" style="width:0%"></div></div>
+        </div>
+        <div class="module-card" style="--card-accent:#84cc16" onclick="navigate('normalization')">
+          <div class="module-icon">⚖️</div>
+          <div class="module-title">Normalization</div>
+          <div class="module-desc">Min-Max scaling, Z-score standardization — critical for training ML models.</div>
+          <div class="module-meta"><span>4 lessons</span><span>•</span><span>~20 min</span></div>
+          <div class="module-progress"><div class="module-progress-fill" id="prog-normalization" style="width:0%"></div></div>
+        </div>
+        <div class="module-card" style="--card-accent:#f97316" onclick="navigate('quiz')">
+          <div class="module-icon">🧠</div>
+          <div class="module-title">Quiz Arena</div>
+          <div class="module-desc">Test your knowledge across all modules with instant feedback and scoring.</div>
+          <div class="module-meta"><span>50+ questions</span><span>•</span><span>Adaptive</span></div>
+          <div class="module-progress"><div class="module-progress-fill" id="prog-quiz" style="width:0%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VECTORS PAGE -->
+    <div class="page" id="page-vectors">
+      <div class="section-header">
+        <div class="section-tag">LINEAR ALGEBRA</div>
+        <h2>Vectors</h2>
+        <p>The foundation of data representation in machine learning</p>
+      </div>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('vectors','concept')">📖 Concepts</button>
+        <button class="tab-btn" onclick="switchTab('vectors','practice')">⚡ Practice</button>
+      </div>
+      <div class="tab-pane active" id="tab-vectors-concept">
+        <div class="concept-card">
+          <div class="concept-title">🔵 What is a Vector?</div>
+          <div class="concept-body">A vector is an ordered list of numbers representing a point or direction in space. In machine learning, each data sample is represented as a feature vector.</div>
+          <div class="formula-block">v = [v₁, v₂, ..., vₙ]</div>
+          <div class="concept-body">For example, a house could be: <strong style="color:var(--accent)">v = [1200, 3, 2, 250000]</strong> (area, bedrooms, bathrooms, price)</div>
+        </div>
+        <div class="concept-card">
+          <div class="concept-title">📐 Vector Operations</div>
+          <div class="concept-body">Key operations you'll use constantly in ML:</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
+            <div>
+              <div class="formula-block">Magnitude: ‖v‖ = √(v₁² + v₂²)</div>
+              <div style="font-size:12px;color:var(--text2);text-align:center">Length of vector</div>
+            </div>
+            <div>
+              <div class="formula-block">Dot Product: a·b = Σ aᵢbᵢ</div>
+              <div style="font-size:12px;color:var(--text2);text-align:center">Similarity measure</div>
+            </div>
+          </div>
+        </div>
+        <div class="concept-card">
+          <div class="concept-title">🧮 Interactive Vector Calculator</div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px">
+            <div class="control-group">
+              <div class="control-label">VECTOR A</div>
+              <input class="control-input" id="vec-a" value="3, 4" placeholder="e.g. 3, 4">
+            </div>
+            <div class="control-group">
+              <div class="control-label">VECTOR B</div>
+              <input class="control-input" id="vec-b" value="1, 2" placeholder="e.g. 1, 2">
+            </div>
+            <div style="display:flex;gap:8px;align-items:flex-end">
+              <button class="op-btn" onclick="calcVector('magnitude')">‖v‖</button>
+              <button class="op-btn" onclick="calcVector('dot')">a·b</button>
+              <button class="op-btn" onclick="calcVector('add')">a+b</button>
+              <button class="op-btn" onclick="calcVector('cosine')">cos θ</button>
+            </div>
+          </div>
+          <div class="result-box" id="vec-result">
+            <div class="result-title">RESULT</div>
+            <div class="result-display" id="vec-result-display">Click an operation above...</div>
+          </div>
+          <div class="canvas-wrap" style="margin-top:12px">
+            <canvas id="vector-canvas" width="400" height="200"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane" id="tab-vectors-practice">
+        <div id="vectors-quiz-content"></div>
+      </div>
+    </div>
+
+    <!-- MATRICES PAGE -->
+    <div class="page" id="page-matrices">
+      <div class="section-header">
+        <div class="section-tag">LINEAR ALGEBRA</div>
+        <h2>Matrix Operations Calculator</h2>
+        <p>Perform operations with step-by-step explanations</p>
+      </div>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('matrices','calc')">🔢 Calculator</button>
+        <button class="tab-btn" onclick="switchTab('matrices','concept')">📖 Concepts</button>
+        <button class="tab-btn" onclick="switchTab('matrices','practice')">⚡ Practice</button>
+      </div>
+
+      <div class="tab-pane active" id="tab-matrices-calc">
+        <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;align-items:center">
+          <div class="control-group">
+            <div class="control-label">MATRIX SIZE</div>
+            <select class="control-input" id="matrix-size" onchange="resizeMatrices()" style="width:auto">
+              <option>2×2</option>
+              <option>3×3</option>
+            </select>
+          </div>
+        </div>
+        <div class="matrix-section">
+          <div class="matrix-box">
+            <h4>MATRIX A</h4>
+            <div class="matrix-grid" id="matrix-a-grid"></div>
+          </div>
+          <div class="matrix-box">
+            <h4>MATRIX B</h4>
+            <div class="matrix-grid" id="matrix-b-grid"></div>
+          </div>
+        </div>
+        <div class="op-buttons">
+          <button class="op-btn" onclick="matrixOp('add')">A + B</button>
+          <button class="op-btn" onclick="matrixOp('sub')">A − B</button>
+          <button class="op-btn" onclick="matrixOp('mul')">A × B</button>
+          <button class="op-btn" onclick="matrixOp('transposeA')">Aᵀ</button>
+          <button class="op-btn" onclick="matrixOp('det')">det(A)</button>
+          <button class="op-btn" onclick="matrixOp('trace')">trace(A)</button>
+          <button class="op-btn" onclick="matrixOp('scalar')">2 × A</button>
+        </div>
+        <div class="result-box">
+          <div class="result-title">RESULT</div>
+          <div class="result-display" id="matrix-result">Select an operation above...</div>
+        </div>
+        <div class="step-by-step" id="matrix-steps" style="display:none"></div>
+      </div>
+
+      <div class="tab-pane" id="tab-matrices-concept">
+        <div class="concept-card">
+          <div class="concept-title">🔢 What is a Matrix?</div>
+          <div class="concept-body">A matrix is a rectangular array of numbers arranged in rows and columns. In ML, matrices represent datasets, transformations, and weight layers in neural networks.</div>
+          <div class="formula-block">A = [[a₁₁, a₁₂], [a₂₁, a₂₂]]</div>
+        </div>
+        <div class="concept-card">
+          <div class="concept-title">⚙️ Why Matrices Matter in ML</div>
+          <div class="concept-body">
+            Every neural network layer performs: <strong style="color:var(--accent)">output = W × input + b</strong><br><br>
+            Where W is a weight matrix. A dataset of 1000 samples with 10 features is a 1000×10 matrix. Matrix operations let us compute predictions for all samples simultaneously (vectorization).
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-matrices-practice">
+        <div id="matrices-quiz-content"></div>
+      </div>
+    </div>
+
+    <!-- PROBABILITY PAGE -->
+    <div class="page" id="page-probability">
+      <div class="section-header">
+        <div class="section-tag">STATISTICS</div>
+        <h2>Probability Simulator</h2>
+        <p>Experiment with random events and see the Law of Large Numbers in action</p>
+      </div>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('prob','coin')">🪙 Coin Toss</button>
+        <button class="tab-btn" onclick="switchTab('prob','dice')">🎲 Dice Roll</button>
+        <button class="tab-btn" onclick="switchTab('prob','bayes')">📐 Bayes</button>
+      </div>
+
+      <div class="tab-pane active" id="tab-prob-coin">
+        <div class="sim-controls">
+          <div class="control-group">
+            <div class="control-label">NUMBER OF FLIPS</div>
+            <input class="control-input" id="flip-count" type="number" value="100" min="1" max="10000">
+          </div>
+          <div class="control-group">
+            <div class="control-label">P(HEADS) BIAS</div>
+            <input class="range-input" id="coin-bias" type="range" min="0" max="100" value="50" oninput="document.getElementById('bias-val').textContent=this.value+'%'">
+            <span style="font-family:var(--mono);font-size:12px;color:var(--accent)" id="bias-val">50%</span>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-primary" onclick="runCoinSim()">▶ Simulate</button>
+            <button class="btn btn-secondary" onclick="resetCoin()">↺ Reset</button>
+          </div>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="coin-canvas" width="700" height="240"></canvas>
+        </div>
+        <div class="sim-stats" id="coin-stats">
+          <div class="stat-pill">Heads: <span id="coin-heads">—</span></div>
+          <div class="stat-pill">Tails: <span id="coin-tails">—</span></div>
+          <div class="stat-pill">H Ratio: <span id="coin-ratio">—</span></div>
+          <div class="stat-pill">Expected: <span id="coin-expected">50%</span></div>
+        </div>
+        <div class="concept-card" style="margin-top:20px">
+          <div class="concept-title">⚖️ Law of Large Numbers</div>
+          <div class="concept-body">As n → ∞, the empirical frequency converges to the true probability. Try flipping 10 vs 10,000 times to see this in action. This is why ML models need large datasets!</div>
+          <div class="formula-block">P(A) = lim(n→∞) [count(A) / n]</div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-prob-dice">
+        <div class="sim-controls">
+          <div class="control-group">
+            <div class="control-label">NUMBER OF ROLLS</div>
+            <input class="control-input" id="dice-count" type="number" value="300" min="1" max="10000">
+          </div>
+          <button class="btn btn-primary" onclick="runDiceSim()">▶ Roll Dice</button>
+          <button class="btn btn-secondary" onclick="resetDice()">↺ Reset</button>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="dice-canvas" width="700" height="260"></canvas>
+        </div>
+        <div class="sim-stats" id="dice-stats"></div>
+      </div>
+
+      <div class="tab-pane" id="tab-prob-bayes">
+        <div class="concept-card">
+          <div class="concept-title">🔮 Bayes' Theorem</div>
+          <div class="concept-body">Bayes' theorem lets us update our beliefs when new evidence arrives. It's fundamental to probabilistic ML models like Naive Bayes classifiers.</div>
+          <div class="formula-block">P(A|B) = P(B|A) × P(A) / P(B)</div>
+        </div>
+        <div class="concept-card">
+          <div class="concept-title">🦠 Medical Test Example</div>
+          <div class="concept-body">A disease affects 1% of the population. A test is 95% accurate. If you test positive, what's the actual probability you have the disease?</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:12px">
+            <div class="control-group">
+              <div class="control-label">DISEASE PREVALENCE (%)</div>
+              <input class="control-input" id="bayes-prev" type="number" value="1" min="0.1" max="99" step="0.1">
+            </div>
+            <div class="control-group">
+              <div class="control-label">TEST SENSITIVITY (%)</div>
+              <input class="control-input" id="bayes-sens" type="number" value="95" min="1" max="100" step="1">
+            </div>
+            <div class="control-group">
+              <div class="control-label">TEST SPECIFICITY (%)</div>
+              <input class="control-input" id="bayes-spec" type="number" value="90" min="1" max="100" step="1">
+            </div>
+            <div style="display:flex;align-items:flex-end">
+              <button class="btn btn-primary" onclick="calcBayes()">Calculate</button>
+            </div>
+          </div>
+          <div class="result-box" style="margin-top:16px" id="bayes-result">
+            <div class="result-title">RESULT</div>
+            <div class="result-display" id="bayes-display">Enter values and click Calculate...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DESCRIPTIVE STATS PAGE -->
+    <div class="page" id="page-descriptive">
+      <div class="section-header">
+        <div class="section-tag">STATISTICS</div>
+        <h2>Descriptive Statistics</h2>
+        <p>Summarize and understand your data before modeling</p>
+      </div>
+      <div class="concept-card">
+        <div class="concept-title">📝 Enter Your Data</div>
+        <div style="display:flex;gap:8px;margin-bottom:12px">
+          <input class="control-input" id="stats-input" value="12, 7, 3, 14, 6, 11, 5, 4, 9, 15" style="flex:1;width:auto" placeholder="Enter comma-separated numbers">
+          <button class="btn btn-primary" onclick="calcStats()">Analyze</button>
+          <button class="btn btn-secondary" onclick="randomStats()">🎲 Random</button>
+        </div>
+        <div class="stats-row" id="stats-cards"></div>
+        <div class="canvas-wrap">
+          <canvas id="stats-canvas" width="700" height="200"></canvas>
+        </div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-title">📐 Formulas Reference</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div>
+            <div class="formula-block">Mean: x̄ = (1/n) Σ xᵢ</div>
+            <div class="formula-block">Variance: σ² = (1/n) Σ(xᵢ - x̄)²</div>
+          </div>
+          <div>
+            <div class="formula-block">Std Dev: σ = √(σ²)</div>
+            <div class="formula-block">CV: (σ / x̄) × 100%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DISTRIBUTIONS PAGE -->
+    <div class="page" id="page-distributions">
+      <div class="section-header">
+        <div class="section-tag">STATISTICS</div>
+        <h2>Probability Distributions</h2>
+        <p>Understand the shape of your data</p>
+      </div>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('dist','normal')">📊 Normal</button>
+        <button class="tab-btn" onclick="switchTab('dist','binomial')">🎯 Binomial</button>
+        <button class="tab-btn" onclick="switchTab('dist','uniform')">▬ Uniform</button>
+      </div>
+      <div class="tab-pane active" id="tab-dist-normal">
+        <div class="concept-card">
+          <div class="concept-title">🔔 Normal (Gaussian) Distribution</div>
+          <div class="concept-body">The "bell curve" — the most important distribution in statistics. Many natural phenomena follow this. Used extensively in ML for weight initialization and modeling noise.</div>
+          <div class="formula-block">f(x) = (1/σ√2π) · e^(-(x-μ)²/2σ²)</div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;margin:12px 0">
+            <div class="control-group">
+              <div class="control-label">MEAN (μ)</div>
+              <input class="range-input" type="range" id="norm-mu" min="-3" max="3" value="0" step="0.1" oninput="drawNormal()">
+              <span style="font-family:var(--mono);font-size:12px;color:var(--accent)" id="norm-mu-val">0</span>
+            </div>
+            <div class="control-group">
+              <div class="control-label">STD DEV (σ)</div>
+              <input class="range-input" type="range" id="norm-sigma" min="0.3" max="3" value="1" step="0.1" oninput="drawNormal()">
+              <span style="font-family:var(--mono);font-size:12px;color:var(--accent)" id="norm-sigma-val">1</span>
+            </div>
+          </div>
+          <div class="canvas-wrap">
+            <canvas id="normal-canvas" width="700" height="250"></canvas>
+          </div>
+          <div class="sim-stats">
+            <div class="stat-pill">68% within <span>±1σ</span></div>
+            <div class="stat-pill">95% within <span>±2σ</span></div>
+            <div class="stat-pill">99.7% within <span>±3σ</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane" id="tab-dist-binomial">
+        <div class="concept-card">
+          <div class="concept-title">🎯 Binomial Distribution</div>
+          <div class="concept-body">Models the number of successes in n independent trials each with probability p. Used in binary classification evaluation.</div>
+          <div class="formula-block">P(X=k) = C(n,k) · pᵏ · (1-p)^(n-k)</div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;margin:12px 0">
+            <div class="control-group">
+              <div class="control-label">TRIALS (n)</div>
+              <input class="range-input" type="range" id="binom-n" min="5" max="50" value="20" oninput="drawBinomial()">
+              <span style="font-family:var(--mono);font-size:12px;color:var(--accent)" id="binom-n-val">20</span>
+            </div>
+            <div class="control-group">
+              <div class="control-label">PROBABILITY (p)</div>
+              <input class="range-input" type="range" id="binom-p" min="0.05" max="0.95" value="0.5" step="0.05" oninput="drawBinomial()">
+              <span style="font-family:var(--mono);font-size:12px;color:var(--accent)" id="binom-p-val">0.5</span>
+            </div>
+          </div>
+          <div class="canvas-wrap">
+            <canvas id="binomial-canvas" width="700" height="250"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane" id="tab-dist-uniform">
+        <div class="concept-card">
+          <div class="concept-title">▬ Uniform Distribution</div>
+          <div class="concept-body">Every value in the range [a, b] is equally likely. Used in random weight initialization and generating random samples.</div>
+          <div class="formula-block">f(x) = 1 / (b - a)  for a ≤ x ≤ b</div>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;margin:12px 0">
+            <div class="control-group">
+              <div class="control-label">MIN (a)</div>
+              <input class="control-input" type="number" id="unif-a" value="0" style="width:90px">
+            </div>
+            <div class="control-group">
+              <div class="control-label">MAX (b)</div>
+              <input class="control-input" type="number" id="unif-b" value="10" style="width:90px">
+            </div>
+            <div class="control-group">
+              <div class="control-label">SAMPLES</div>
+              <input class="control-input" type="number" id="unif-n" value="1000" style="width:100px">
+            </div>
+            <div style="display:flex;align-items:flex-end">
+              <button class="btn btn-primary" onclick="drawUniform()">Generate</button>
+            </div>
+          </div>
+          <div class="canvas-wrap">
+            <canvas id="uniform-canvas" width="700" height="250"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CORRELATION PAGE -->
+    <div class="page" id="page-correlation">
+      <div class="section-header">
+        <div class="section-tag">STATISTICS</div>
+        <h2>Correlation</h2>
+        <p>Measure how variables relate — critical for feature engineering</p>
+      </div>
+      <div class="concept-card">
+        <div class="formula-block">Pearson's r = Σ(xᵢ-x̄)(yᵢ-ȳ) / √[Σ(xᵢ-x̄)² · Σ(yᵢ-ȳ)²]</div>
+        <div class="scatter-controls">
+          <div class="control-group">
+            <div class="control-label">CORRELATION TARGET</div>
+            <input class="range-input" type="range" id="corr-slider" min="-100" max="100" value="80" oninput="updateCorrelation()">
+            <span style="font-family:var(--mono);font-size:12px;color:var(--accent)" id="corr-target">r ≈ 0.80</span>
+          </div>
+          <div class="control-group">
+            <div class="control-label">SAMPLE SIZE</div>
+            <input class="control-input" type="number" id="corr-n" value="60" min="10" max="500" style="width:90px">
+          </div>
+          <button class="btn btn-primary" onclick="generateScatter()">Generate</button>
+        </div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap">
+          <div class="canvas-wrap" style="flex:1;min-width:280px">
+            <canvas id="scatter-canvas" width="360" height="300"></canvas>
+          </div>
+          <div style="flex:0 0 200px">
+            <div class="stat-card" style="margin-bottom:10px">
+              <div class="stat-card-label">PEARSON's r</div>
+              <div class="stat-card-value" id="corr-r">—</div>
+            </div>
+            <div class="stat-card" style="margin-bottom:10px">
+              <div class="stat-card-label">r²</div>
+              <div class="stat-card-value" id="corr-r2">—</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-label">INTERPRETATION</div>
+              <div style="font-size:13px;color:var(--text2);margin-top:6px" id="corr-interp">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="concept-card">
+        <div class="concept-title">⚠️ Correlation ≠ Causation</div>
+        <div class="concept-body">A high correlation between ice cream sales and drowning rates doesn't mean ice cream causes drowning — both are driven by hot weather (a confounding variable). Always think about underlying mechanisms!</div>
+      </div>
+    </div>
+
+    <!-- NORMALIZATION PAGE -->
+    <div class="page" id="page-normalization">
+      <div class="section-header">
+        <div class="section-tag">DATA PREPROCESSING</div>
+        <h2>Normalization & Standardization</h2>
+        <p>Scale your features before feeding data to ML models</p>
+      </div>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('norm','demo')">⚖️ Live Demo</button>
+        <button class="tab-btn" onclick="switchTab('norm','concept')">📖 When to Use</button>
+      </div>
+      <div class="tab-pane active" id="tab-norm-demo">
+        <div class="concept-card">
+          <div class="concept-title">📊 Enter Your Data</div>
+          <div class="data-input-row">
+            <input class="control-input" id="norm-input" value="10, 20, 30, 40, 50, 200" style="flex:1;width:auto">
+            <button class="btn btn-primary" onclick="calcNorm()">Transform</button>
+            <button class="btn btn-secondary" onclick="normRandom()">🎲 Random</button>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="norm-table" id="norm-table">
+              <thead>
+                <tr>
+                  <th>ORIGINAL</th>
+                  <th>MIN-MAX (0–1)</th>
+                  <th>Z-SCORE</th>
+                  <th>VISUALIZATION</th>
+                </tr>
+              </thead>
+              <tbody id="norm-tbody"></tbody>
+            </table>
+          </div>
+          <div class="canvas-wrap" style="margin-top:16px">
+            <canvas id="norm-canvas" width="700" height="200"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane" id="tab-norm-concept">
+        <div class="concept-card">
+          <div class="concept-title">📐 Min-Max Normalization</div>
+          <div class="formula-block">x' = (x - x_min) / (x_max - x_min)</div>
+          <div class="concept-body">Scales data to [0, 1]. Use when: features have known bounds, distribution doesn't need to be Gaussian, algorithms sensitive to magnitude (KNN, SVM, Neural Nets).</div>
+        </div>
+        <div class="concept-card">
+          <div class="concept-title">📊 Z-Score Standardization</div>
+          <div class="formula-block">x' = (x - μ) / σ</div>
+          <div class="concept-body">Centers data at 0 with std dev 1. Use when: data is approximately Gaussian, algorithms assume zero-centered data (logistic regression, PCA), outliers are present.</div>
+        </div>
+        <div class="concept-card">
+          <div class="concept-title">🤔 Which to Use?</div>
+          <div class="concept-body">
+            <strong style="color:var(--accent)">Min-Max</strong> — images (pixel values 0–255), bounded features, when you know the min/max.<br><br>
+            <strong style="color:var(--accent4)">Z-Score</strong> — general purpose, when outliers matter, when you expect Gaussian data, for PCA.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUIZ PAGE -->
+    <div class="page" id="page-quiz">
+      <div class="section-header">
+        <div class="section-tag">PRACTICE</div>
+        <h2>Quiz Arena</h2>
+        <p>Test your knowledge and earn XP</p>
+      </div>
+      <div class="quiz-progress">
+        <span>Question <span id="q-num">1</span> of <span id="q-total">10</span></span>
+        <div class="quiz-dots" id="quiz-dots"></div>
+        <span class="quiz-score">Score: <span id="q-score">0</span></span>
+      </div>
+      <div id="quiz-container"></div>
+      <div style="display:flex;gap:12px;margin-top:16px" id="quiz-controls">
+        <button class="btn btn-primary" id="btn-next" onclick="nextQuestion()" style="display:none">Next Question →</button>
+        <button class="btn btn-secondary" onclick="restartQuiz()">↺ Restart</button>
+      </div>
+    </div>
+
+    <!-- PROGRESS PAGE -->
+    <div class="page" id="page-progress">
+      <div class="progress-header">
+        <div class="progress-avatar">🎓</div>
+        <div>
+          <div class="progress-user-title" id="prog-level-title">Level 1 — Apprentice</div>
+          <div class="progress-user-sub" id="prog-xp-sub">0 XP total • 0 questions answered correctly</div>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <h2>Achievements</h2>
+      </div>
+      <div class="badges-section">
+        <div class="badges-grid" id="badges-grid"></div>
+      </div>
+
+      <div class="section-header">
+        <h2>Module Progress</h2>
+      </div>
+      <div class="module-progress-list" id="module-prog-list"></div>
+    </div>
+  </main>
+</div>
+
+<script>
+// ===== STATE =====
+const state = {
+  xp: 0,
+  streak: 0,
+  level: 1,
+  correctAnswers: 0,
+  quizIndex: 0,
+  quizAnswered: false,
+  quizScore: 0,
+  quizAnswers: [],
+  moduleProgress: {
+    vectors: 0, matrices: 0, probability: 0,
+    descriptive: 0, distributions: 0, correlation: 0,
+    normalization: 0, quiz: 0
+  },
+  badges: {
+    firstStep: false, matrixMaster: false,
+    probabilist: false, statsWiz: false, dataPrep: false,
+    quizAce: false, streakFire: false, centurion: false
+  }
+};
+
+// ===== LEVELS =====
+const levels = [
+  { min: 0, max: 100, name: 'Apprentice', emoji: '🌱' },
+  { min: 100, max: 300, name: 'Explorer', emoji: '🔭' },
+  { min: 300, max: 600, name: 'Analyst', emoji: '📊' },
+  { min: 600, max: 1000, name: 'Data Scientist', emoji: '🧪' },
+  { min: 1000, max: 999999, name: 'ML Engineer', emoji: '🤖' }
+];
+
+function getLevel(xp) {
+  return levels.find(l => xp >= l.min && xp < l.max) || levels[levels.length-1];
+}
+
+// ===== XP SYSTEM =====
+function addXP(amount, reason='') {
+  state.xp += amount;
+  updateXPUI();
+  if(reason) showToast(`+${amount} XP — ${reason}`, 'info');
+  checkBadges();
+  checkLevel();
+}
+
+function updateXPUI() {
+  const lv = getLevel(state.xp);
+  const next = levels[levels.indexOf(lv)+1];
+  const fillPct = next ? ((state.xp - lv.min) / (next.min - lv.min) * 100) : 100;
+  document.getElementById('xp-fill').style.width = fillPct + '%';
+  document.getElementById('xp-display').textContent = `${state.xp} / ${next ? next.min : '∞'} XP`;
+  document.getElementById('level-label').textContent = `Level ${levels.indexOf(lv)+1} — ${lv.name}`;
+  document.getElementById('prog-level-title').textContent = `Level ${levels.indexOf(lv)+1} — ${lv.emoji} ${lv.name}`;
+  document.getElementById('prog-xp-sub').textContent = `${state.xp} XP total • ${state.correctAnswers} questions answered correctly`;
+}
+
+function checkLevel() {
+  const lv = getLevel(state.xp);
+  const lvNum = levels.indexOf(lv) + 1;
+  if(lvNum > state.level) {
+    state.level = lvNum;
+    showToast(`🎉 Level up! You're now ${lv.emoji} ${lv.name}`, 'success');
+  }
+}
+
+// ===== BADGES =====
+const BADGES = [
+  { id: 'firstStep', emoji: '👶', name: 'First Step', desc: 'Open any module' },
+  { id: 'matrixMaster', emoji: '🔢', name: 'Matrix Master', desc: 'Use all matrix ops' },
+  { id: 'probabilist', emoji: '🎲', name: 'Probabilist', desc: 'Run 5 simulations' },
+  { id: 'statsWiz', emoji: '📊', name: 'Stats Wiz', desc: 'Analyze 3 datasets' },
+  { id: 'dataPrep', emoji: '⚖️', name: 'Data Prep', desc: 'Normalize a dataset' },
+  { id: 'quizAce', emoji: '🏆', name: 'Quiz Ace', desc: 'Score 100% on quiz' },
+  { id: 'streakFire', emoji: '🔥', name: 'On Fire', desc: '3+ day streak' },
+  { id: 'centurion', emoji: '💯', name: 'Centurion', desc: 'Earn 100+ XP' }
+];
+
+function checkBadges() {
+  if(!state.badges.centurion && state.xp >= 100) {
+    state.badges.centurion = true;
+    showToast('🏅 Badge unlocked: Centurion!', 'success');
+    renderBadges();
+    renderTopBadges();
+  }
+}
+
+function unlockBadge(id) {
+  if(!state.badges[id]) {
+    state.badges[id] = true;
+    const b = BADGES.find(x => x.id === id);
+    if(b) showToast(`🏅 Badge unlocked: ${b.name}!`, 'success');
+    renderBadges();
+    renderTopBadges();
+  }
+}
+
+function renderBadges() {
+  const el = document.getElementById('badges-grid');
+  if(!el) return;
+  el.innerHTML = BADGES.map(b => `
+    <div class="badge-card ${state.badges[b.id] ? 'unlocked' : 'locked'}" title="${b.desc}">
+      <div class="badge-emoji">${b.emoji}</div>
+      <div class="badge-name">${b.name}</div>
+    </div>`).join('');
+}
+
+function renderTopBadges() {
+  const earned = BADGES.filter(b => state.badges[b.id]).slice(-3);
+  document.getElementById('top-badges').innerHTML = earned.map(b =>
+    `<div class="badge-item unlocked tooltip" data-tip="${b.name}">${b.emoji}</div>`
+  ).join('');
+}
+
+// ===== NAVIGATION =====
+function navigate(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const el = document.getElementById('page-' + page);
+  if(el) el.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if(n.getAttribute('onclick') && n.getAttribute('onclick').includes(`'${page}'`)) n.classList.add('active');
+  });
+  const titles = {
+    home: 'Dashboard', vectors: 'Vectors', matrices: 'Matrices',
+    probability: 'Probability', descriptive: 'Descriptive Stats',
+    distributions: 'Distributions', correlation: 'Correlation',
+    normalization: 'Normalization', quiz: 'Quiz Arena', progress: 'My Progress'
+  };
+  document.getElementById('page-title').textContent = titles[page] || page;
+
+  // Trigger init
+  if(page === 'matrices') initMatrices();
+  if(page === 'probability') { renderCoinPlaceholder(); }
+  if(page === 'distributions') { setTimeout(() => { drawNormal(); drawBinomial(); }, 50); }
+  if(page === 'descriptive') { setTimeout(() => calcStats(), 50); }
+  if(page === 'normalization') { setTimeout(() => calcNorm(), 50); }
+  if(page === 'correlation') { setTimeout(() => generateScatter(), 50); }
+  if(page === 'vectors') setTimeout(() => drawVectorCanvas(), 50);
+  if(page === 'quiz') initQuiz();
+  if(page === 'progress') { renderBadges(); renderModuleProgress(); }
+
+  unlockBadge('firstStep');
+  if(!state.moduleProgress[page]) {
+    state.moduleProgress[page] = state.moduleProgress[page] || 5;
+    updateModuleProgressUI();
+  }
+}
+
+function switchTab(module, tab) {
+  const prefix = `tab-${module}-`;
+  document.querySelectorAll(`[id^="${prefix}"]`).forEach(t => t.classList.remove('active'));
+  const target = document.getElementById(prefix + tab);
+  if(target) target.classList.add('active');
+  const parent = target?.closest('.page');
+  if(parent) {
+    parent.querySelectorAll('.tab-btn').forEach((b, i) => {
+      b.classList.toggle('active', b.getAttribute('onclick')?.includes(`'${tab}'`));
+    });
+  }
+  // Trigger redraws
+  if(module === 'dist' && tab === 'normal') drawNormal();
+  if(module === 'dist' && tab === 'binomial') drawBinomial();
+  if(module === 'dist' && tab === 'uniform') drawUniform();
+}
+
+// ===== CANVAS HELPERS =====
+function clearCanvas(id) {
+  const c = document.getElementById(id);
+  if(!c) return null;
+  const ctx = c.getContext('2d');
+  ctx.clearRect(0, 0, c.width, c.height);
+  return { ctx, w: c.width, h: c.height };
+}
+
+// ===== VECTOR CALC =====
+function parseVec(id) {
+  return document.getElementById(id).value.split(',').map(x => parseFloat(x.trim())).filter(x => !isNaN(x));
+}
+
+function calcVector(op) {
+  const a = parseVec('vec-a'), b = parseVec('vec-b');
+  let result = '', steps = '';
+  if(op === 'magnitude') {
+    const mag = Math.sqrt(a.reduce((s, v) => s + v*v, 0));
+    result = `‖a‖ = √(${a.map(v => v+'²').join(' + ')}) = √${a.reduce((s,v)=>s+v*v,0).toFixed(3)} ≈ ${mag.toFixed(4)}`;
+  } else if(op === 'dot') {
+    const dot = a.reduce((s, v, i) => s + v*(b[i]||0), 0);
+    result = `a · b = ${a.map((v,i) => `${v}×${b[i]||0}`).join(' + ')} = ${dot.toFixed(4)}`;
+  } else if(op === 'add') {
+    const sum = a.map((v, i) => v + (b[i]||0));
+    result = `a + b = [${sum.map(v => v.toFixed(3)).join(', ')}]`;
+  } else if(op === 'cosine') {
+    const dot = a.reduce((s, v, i) => s + v*(b[i]||0), 0);
+    const magA = Math.sqrt(a.reduce((s,v) => s+v*v, 0));
+    const magB = Math.sqrt(b.reduce((s,v) => s+v*v, 0));
+    const cos = dot / (magA * magB);
+    const angle = (Math.acos(Math.min(1,Math.max(-1,cos))) * 180 / Math.PI).toFixed(2);
+    result = `cos θ = ${cos.toFixed(4)}\nangle θ = ${angle}°`;
+  }
+  document.getElementById('vec-result-display').textContent = result;
+  drawVectorCanvas();
+  addXP(5, 'vector operation');
+}
+
+function drawVectorCanvas() {
+  const cv = clearCanvas('vector-canvas');
+  if(!cv) return;
+  const { ctx, w, h } = cv;
+  const a = parseVec('vec-a'), b = parseVec('vec-b');
+  if(a.length < 2 || b.length < 2) return;
+  const cx = w/2, cy = h/2, scale = 30;
+  ctx.strokeStyle = '#1e2d4a'; ctx.lineWidth = 1;
+  for(let x = cx%scale; x < w; x += scale) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke(); }
+  for(let y = cy%scale; y < h; y += scale) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+  ctx.strokeStyle = '#2a3f60'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(0,cy); ctx.lineTo(w,cy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx,0); ctx.lineTo(cx,h); ctx.stroke();
+  function drawArrow(vx, vy, color, label) {
+    const ex = cx + vx*scale, ey = cy - vy*scale;
+    ctx.strokeStyle = color; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(ex, ey); ctx.stroke();
+    const angle = Math.atan2(ey-cy, ex-cx);
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(ex, ey);
+    ctx.lineTo(ex - 10*Math.cos(angle-0.4), ey - 10*Math.sin(angle-0.4));
+    ctx.lineTo(ex - 10*Math.cos(angle+0.4), ey - 10*Math.sin(angle+0.4));
+    ctx.fill();
+    ctx.fillStyle = color; ctx.font = '13px Space Mono';
+    ctx.fillText(label, ex + 6, ey - 6);
+  }
+  drawArrow(a[0], a[1], '#00d4ff', 'a');
+  drawArrow(b[0], b[1], '#f59e0b', 'b');
+}
+
+// ===== MATRIX CALCULATOR =====
+let matSize = 2;
+
+function initMatrices() {
+  resizeMatrices();
+}
+
+function resizeMatrices() {
+  matSize = parseInt(document.getElementById('matrix-size').value) || 2;
+  buildMatrixInput('matrix-a-grid', 'a', matSize, [[1,2],[3,4]]);
+  buildMatrixInput('matrix-b-grid', 'b', matSize, [[5,6],[7,8]]);
+  if(matSize === 3) {
+    fillMatrix('a', [[1,2,3],[4,5,6],[7,8,9]]);
+    fillMatrix('b', [[9,8,7],[6,5,4],[3,2,1]]);
+  }
+}
+
+function buildMatrixInput(gridId, name, size, defaults) {
+  const grid = document.getElementById(gridId);
+  grid.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+  grid.innerHTML = '';
+  for(let r = 0; r < size; r++) for(let c = 0; c < size; c++) {
+    const inp = document.createElement('input');
+    inp.type = 'number'; inp.step = 'any';
+    inp.value = (defaults[r] && defaults[r][c] !== undefined) ? defaults[r][c] : 0;
+    inp.id = `mat-${name}-${r}-${c}`;
+    grid.appendChild(inp);
+  }
+}
+
+function fillMatrix(name, vals) {
+  for(let r = 0; r < matSize; r++) for(let c = 0; c < matSize; c++) {
+    const el = document.getElementById(`mat-${name}-${r}-${c}`);
+    if(el && vals[r]) el.value = vals[r][c];
+  }
+}
+
+function readMatrix(name) {
+  const m = [];
+  for(let r = 0; r < matSize; r++) {
+    m[r] = [];
+    for(let c = 0; c < matSize; c++) m[r][c] = parseFloat(document.getElementById(`mat-${name}-${r}-${c}`).value) || 0;
+  }
+  return m;
+}
+
+function fmtMatrix(m) {
+  return m.map(row => '[' + row.map(v => v.toFixed ? v.toFixed(3).replace(/\.?0+$/,'') : v).join(', ') + ']').join('\n');
+}
+
+function matMul(A, B) {
+  const n = A.length;
+  const C = Array.from({length:n}, () => Array(n).fill(0));
+  for(let i=0;i<n;i++) for(let j=0;j<n;j++) for(let k=0;k<n;k++) C[i][j] += A[i][k]*B[k][j];
+  return C;
+}
+
+function det2(m) { return m[0][0]*m[1][1] - m[0][1]*m[1][0]; }
+function det3(m) {
+  return m[0][0]*(m[1][1]*m[2][2]-m[1][2]*m[2][1])
+       - m[0][1]*(m[1][0]*m[2][2]-m[1][2]*m[2][0])
+       + m[0][2]*(m[1][0]*m[2][1]-m[1][1]*m[2][0]);
+}
+
+function matrixOp(op) {
+  const A = readMatrix('a'), B = readMatrix('b');
+  let result = '', stepsHtml = '';
+  const el = document.getElementById('matrix-result');
+  const stepsEl = document.getElementById('matrix-steps');
+
+  if(op === 'add') {
+    const R = A.map((r,i) => r.map((v,j) => v + B[i][j]));
+    result = fmtMatrix(R);
+    stepsHtml = `<div class="step"><div class="step-num">1</div><div>Add element-wise: C[i][j] = A[i][j] + B[i][j]</div></div>` +
+      A.map((r,i) => `<div class="step"><div class="step-num">${i+2}</div><div>Row ${i+1}: [${r.map((v,j)=>`<span class="highlight">${v}+${B[i][j]}=${v+B[i][j]}</span>`).join(', ')}]</div></div>`).join('');
+  } else if(op === 'sub') {
+    const R = A.map((r,i) => r.map((v,j) => v - B[i][j]));
+    result = fmtMatrix(R);
+  } else if(op === 'mul') {
+    const R = matMul(A, B);
+    result = fmtMatrix(R);
+    stepsHtml = `<div class="step"><div class="step-num">1</div><div>Matrix multiply: C[i][j] = Σ A[i][k] × B[k][j]</div></div>`;
+    R.forEach((r,i) => r.forEach((v,j) => {
+      const terms = A[i].map((a,k) => `${a}×${B[k][j]}`).join('+');
+      stepsHtml += `<div class="step"><div class="step-num">→</div><div>C[${i}][${j}] = ${terms} = <span class="highlight">${v.toFixed(3)}</span></div></div>`;
+    }));
+  } else if(op === 'transposeA') {
+    const R = A[0].map((_, j) => A.map(r => r[j]));
+    result = fmtMatrix(R);
+    stepsHtml = `<div class="step"><div class="step-num">1</div><div>Transpose: swap rows and columns — Aᵀ[i][j] = A[j][i]</div></div>`;
+  } else if(op === 'det') {
+    const d = matSize === 2 ? det2(A) : det3(A);
+    result = `det(A) = ${d.toFixed(4)}`;
+    if(matSize === 2) stepsHtml = `<div class="step"><div class="step-num">1</div><div>det = a×d - b×c = ${A[0][0]}×${A[1][1]} - ${A[0][1]}×${A[1][0]} = <span class="highlight">${d.toFixed(4)}</span></div></div>`;
+  } else if(op === 'trace') {
+    const t = A.reduce((s,r,i) => s+r[i], 0);
+    result = `trace(A) = ${A.map((r,i) => r[i]).join(' + ')} = ${t}`;
+    stepsHtml = `<div class="step"><div class="step-num">1</div><div>trace = sum of diagonal elements</div></div>`;
+  } else if(op === 'scalar') {
+    const R = A.map(r => r.map(v => v*2));
+    result = fmtMatrix(R);
+  }
+
+  el.textContent = result;
+  if(stepsHtml) { stepsEl.innerHTML = stepsHtml; stepsEl.style.display = 'block'; }
+  else stepsEl.style.display = 'none';
+  addXP(8, 'matrix operation');
+  state.moduleProgress.matrices = Math.min(100, state.moduleProgress.matrices + 12);
+  updateModuleProgressUI();
+  unlockBadge('matrixMaster');
+}
+
+// ===== COIN SIMULATOR =====
+let coinHistory = [], simRunning = false;
+let simCount = 0;
+
+function renderCoinPlaceholder() {
+  const cv = clearCanvas('coin-canvas');
+  if(!cv) return;
+  const { ctx, w, h } = cv;
+  ctx.fillStyle = '#1e2d4a40';
+  ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = '#475569';
+  ctx.font = '14px Space Mono';
+  ctx.textAlign = 'center';
+  ctx.fillText('Click "Simulate" to run coin tosses', w/2, h/2);
+}
+
+function runCoinSim() {
+  const n = parseInt(document.getElementById('flip-count').value) || 100;
+  const bias = parseFloat(document.getElementById('coin-bias').value) / 100;
+  let heads = 0, ratios = [];
+  for(let i = 0; i < n; i++) {
+    if(Math.random() < bias) heads++;
+    ratios.push(heads / (i+1));
+  }
+  const tails = n - heads;
+  document.getElementById('coin-heads').textContent = heads;
+  document.getElementById('coin-tails').textContent = tails;
+  document.getElementById('coin-ratio').textContent = (heads/n*100).toFixed(1)+'%';
+  document.getElementById('coin-expected').textContent = (bias*100).toFixed(0)+'%';
+  drawCoinChart(ratios, bias, n);
+  addXP(10, 'coin simulation');
+  state.moduleProgress.probability = Math.min(100, state.moduleProgress.probability + 15);
+  updateModuleProgressUI();
+  unlockBadge('probabilist');
+  simCount++; if(simCount >= 5) unlockBadge('probabilist');
+}
+
+function drawCoinChart(ratios, expected, n) {
+  const cv = clearCanvas('coin-canvas');
+  if(!cv) return;
+  const { ctx, w, h } = cv;
+  const pad = 40;
+  ctx.strokeStyle = '#1e2d4a'; ctx.lineWidth = 1;
+  const cols = 8;
+  for(let i = 0; i <= cols; i++) {
+    const x = pad + (w-2*pad)*i/cols;
+    ctx.beginPath(); ctx.moveTo(x, pad); ctx.lineTo(x, h-pad); ctx.stroke();
+    ctx.fillStyle = '#475569'; ctx.font = '10px Space Mono'; ctx.textAlign = 'center';
+    ctx.fillText(Math.round(n*i/cols), x, h-pad+14);
+  }
+  for(let i = 0; i <= 4; i++) {
+    const y = pad + (h-2*pad)*i/4;
+    ctx.beginPath(); ctx.moveTo(pad, y); ctx.lineTo(w-pad, y); ctx.stroke();
+    ctx.fillStyle = '#475569'; ctx.textAlign = 'right';
+    ctx.fillText((1 - i/4).toFixed(2), pad-5, y+4);
+  }
+  // Expected line
+  const ey = pad + (h-2*pad)*(1-expected);
+  ctx.strokeStyle = 'rgba(245,158,11,0.5)'; ctx.lineWidth = 1.5;
+  ctx.setLineDash([6,4]);
+  ctx.beginPath(); ctx.moveTo(pad, ey); ctx.lineTo(w-pad, ey); ctx.stroke();
+  ctx.setLineDash([]);
+  // Ratio line
+  ctx.strokeStyle = '#00d4ff'; ctx.lineWidth = 2;
+  ctx.beginPath();
+  ratios.forEach((r, i) => {
+    const x = pad + (w-2*pad)*i/(ratios.length-1);
+    const y = pad + (h-2*pad)*(1-r);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+  ctx.fillStyle = '#00d4ff'; ctx.font = '11px Space Mono'; ctx.textAlign = 'left';
+  ctx.fillText('— observed ratio', pad+5, pad+16);
+  ctx.fillStyle = 'rgba(245,158,11,0.9)';
+  ctx.fillText(`- - expected (${(expected*100).toFixed(0)}%)`, pad+5, pad+32);
+}
+
+function resetCoin() {
+  renderCoinPlaceholder();
+  ['coin-heads','coin-tails','coin-ratio'].forEach(id => document.getElementById(id).textContent = '—');
+}
+
+// ===== DICE SIMULATOR =====
+function runDiceSim() {
+  const n = parseInt(document.getElementById('dice-count').value) || 300;
+  const counts = [0,0,0,0,0,0];
+  for(let i = 0; i < n; i++) counts[Math.floor(Math.random()*6)]++;
+  drawDiceChart(counts, n);
+  const statsEl = document.getElementById('dice-stats');
+  statsEl.innerHTML = counts.map((c,i) => `<div class="stat-pill">⚀${i+1}: <span>${c} (${(c/n*100).toFixed(1)}%)</span></div>`).join('');
+  addXP(8);
+}
+
+function drawDiceChart(counts, n) {
+  const cv = clearCanvas('dice-canvas');
+  if(!cv) return;
+  const { ctx, w, h } = cv;
+  const pad = 40, bw = (w-2*pad)/6, max = Math.max(...counts);
+  const colors = ['#00d4ff','#7c3aed','#10b981','#f59e0b','#ec4899','#06b6d4'];
+  counts.forEach((c, i) => {
+    const bh = (h-2*pad) * c / max;
+    const x = pad + i*bw + bw*.1, y = h-pad-bh;
+    const grad = ctx.createLinearGradient(0, y, 0, h-pad);
+    grad.addColorStop(0, colors[i] + 'cc');
+    grad.addColorStop(1, colors[i] + '33');
+    ctx.fillStyle = grad;
+    ctx.fillRect(x, y, bw*.8, bh);
+    ctx.fillStyle = colors[i]; ctx.font = '10px Space Mono'; ctx.textAlign = 'center';
+    ctx.fillText(`⚀${i+1}`, pad+i*bw+bw/2, h-pad+14);
+    ctx.fillText(c, pad+i*bw+bw/2, y-5);
+  });
+  const expectedY = h-pad - (h-2*pad)*(n/6)/max;
+  ctx.strokeStyle = 'rgba(245,158,11,0.6)'; ctx.setLineDash([5,3]); ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(pad, expectedY); ctx.lineTo(w-pad, expectedY); ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+function resetDice() {
+  clearCanvas('dice-canvas');
+  document.getElementById('dice-stats').innerHTML = '';
+}
+
+// ===== BAYES =====
+function calcBayes() {
+  const prev = parseFloat(document.getElementById('bayes-prev').value)/100;
+  const sens = parseFloat(document.getElementById('bayes-sens').value)/100;
+  const spec = parseFloat(document.getElementById('bayes-spec').value)/100;
+  const fp = 1 - spec;
+  const tp = prev * sens;
+  const fpr = (1-prev) * fp;
+  const posterior = tp / (tp + fpr);
+  document.getElementById('bayes-display').textContent =
+    `P(Disease | Positive Test)\n\n` +
+    `Prior P(Disease)       = ${(prev*100).toFixed(1)}%\n` +
+    `P(+|Disease) sensitivity = ${(sens*100).toFixed(0)}%\n` +
+    `P(+|No Disease) FPR   = ${(fp*100).toFixed(0)}%\n\n` +
+    `True Positives:  ${(tp*100).toFixed(2)}%\n` +
+    `False Positives: ${(fpr*100).toFixed(2)}%\n\n` +
+    `→ P(Disease | +) = ${(posterior*100).toFixed(1)}%`;
+  addXP(15, 'Bayes theorem');
+}
+
+// ===== DESCRIPTIVE STATS =====
+let statsDatasets = 0;
+
+function calcStats() {
+  const vals = document.getElementById('stats-input').value.split(',').map(v => parseFloat(v.trim())).filter(v => !isNaN(v));
+  if(!vals.length) return;
+  const n = vals.length;
+  const sorted = [...vals].sort((a,b)=>a-b);
+  const mean = vals.reduce((s,v)=>s+v)/n;
+  const variance = vals.reduce((s,v)=>s+(v-mean)**2)/n;
+  const std = Math.sqrt(variance);
+  const median = n%2 ? sorted[Math.floor(n/2)] : (sorted[n/2-1]+sorted[n/2])/2;
+  const min = sorted[0], max = sorted[n-1];
+  const range = max - min;
+  const cards = document.getElementById('stats-cards');
+  cards.innerHTML = [
+    ['MEAN', mean.toFixed(3), 'Average'], ['MEDIAN', median.toFixed(3), 'Middle value'],
+    ['STD DEV', std.toFixed(3), 'Spread'], ['VARIANCE', variance.toFixed(3), 'σ²'],
+    ['MIN', min, ''], ['MAX', max, ''], ['RANGE', range, 'max−min'], ['N', n, 'count']
+  ].map(([l,v,s]) => `<div class="stat-card"><div class="stat-card-label">${l}</div><div class="stat-card-value">${typeof v === 'number' && v % 1 !== 0 ? v.toFixed(3) : v}</div><div class="stat-card-sub">${s}</div></div>`).join('');
+  drawStatsChart(vals, mean, std);
+  addXP(10, 'data analysis');
+  statsDatasets++;
+  if(statsDatasets >= 3) { unlockBadge('statsWiz'); state.moduleProgress.descriptive = Math.min(100, state.moduleProgress.descriptive + 20); updateModuleProgressUI(); }
+}
+
+function randomStats() {
+  const n = Math.floor(Math.random()*8)+5;
+  const vals = Array.from({length:n}, () => Math.floor(Math.random()*90+10));
+  document.getElementById('stats-input').value = vals.join(', ');
+  calcStats();
+}
+
+function drawStatsChart(vals, mean, std) {
+  const cv = clearCanvas('stats-canvas');
+  if(!cv) return;
+  const { ctx, w, h } = cv;
+  const min = Math.min(...vals), max = Math.max(...vals);
+  const pad = 40, bw = (w-2*pad)/vals.length * .7, gap = (w-2*pad)/vals.length;
+  const colors = ['#00d4ff','#7c3aed','#10b981','#f59e0b','#ec4899','#06b6d4','#84cc16','#f97316'];
+  vals.forEach((v, i) => {
+    const bh = (h-2*pad)*(v-min)/(max-min||1);
+    const x = pad + i*gap;
+    const y = h-pad-bh;
+    ctx.fillStyle = colors[i%colors.length] + 'aa';
+    ctx.fillRect(x, y, bw, bh);
+    ctx.fillStyle = '#475569'; ctx.font = '9px Space Mono'; ctx.textAlign = 'center';
+    ctx.fillText(v, x+bw/2, y-4);
+  });
+  // Mean line
+  const my = h-pad - (h-2*pad)*(mean-min)/(max-min||1);
+  ctx.strokeStyle = '#00d4ff'; ctx.lineWidth = 2; ctx.setLineDash([6,3]);
+  ctx.beginPath(); ctx.moveTo(pad, my); ctx.lineTo(w-pad, my); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#00d4ff'; ctx.font = '10px Space Mono'; ctx.textAlign = 'right';
+  ctx.fillText(`μ=${mean.toFixed(1)}`, w-pad-4, my-4);
+}
+
+// ===== NORMAL DISTRIBUTION =====
+function normalPDF(x, mu, sigma) {
+  return (1/(sigma*Math.sqrt(2*Math.PI))) * Math.exp(-0.5*((x-mu)/sigma)**2);
+}
+
+function drawNormal() {
+  const mu = parseFloat(document.getElementById('norm-mu').value);
+  const sigma = parseFloat(document.getElementById('norm-sigma').value);
+  document.getElementById('norm-mu-val').textContent = mu.toFixed(1);
+  document.getElementById('norm-sigma-val').textContent = sigma.toFixed(1);
+  const cv = clearCanvas('normal-canvas');
+  if(!cv) return;
+  const { ctx, w, h } = cv;
+  const pad = 40, xmin = -5, xmax = 5;
+  const maxY = normalPDF(mu, mu, sigma);
+  // Grid
+  ctx.strokeStyle = '#1e2d4a'; ctx.lineWidth = 1;
+  for(let x = xmin; x <= xmax; x++) {
+    const px = pad + (x-xmin)/(xmax-xmin)*(w-2*pad);
+    ctx.beginPath(); ctx.moveTo(px, pad); ctx.lineTo(px, h-pad); ctx.stroke();
+    ctx.fillStyle = '#475569'; ctx.font = '10px Space Mono'; ctx.textAlign = 'center';
+    ctx.fillText(x, px, h-pad+14);
+  }
+  // Shaded regions (±1σ, ±2σ, ±3σ)
+  const shades = [[sigma*3,'#00d4ff18'],[sigma*2,'#00d4ff30'],[sigma,'#00d4ff50']];
+  shades.forEach(([s, color]) => {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(pad + (mu-s-xmin)/(xmax-xmin)*(w-2*pad), h-pad);
+    for(let xi = mu-s; xi <= mu+s; xi += (xmax-xmin)/500) {
+      const px = pad + (xi-xmin)/(xmax-xmin)*(w-2*pad);
+      const py = h-pad - (h-2*pad)*normalPDF(xi,mu,sigma)/maxY*.9;
+      ctx.lineTo(px, py);
+    }
+    ctx.closePath(); ctx.fill();
+  });
+  // Curve
+  ctx.strokeStyle = '#00d4ff'; ctx.lineWidth = 2.5; ctx.setLineDash([]);
+  ctx.beginPath();
+  for(let xi = xmin; xi <= xmax; xi += (xmax-xmin)/500) {
+    const px = pad + (xi-xmin)/(xmax-xmin)*(w-2*pad);
+    const py = h-pad - (h-2*pad)*normalPDF(xi,mu,sigma)/maxY*.9;
+    xi === xmin ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+  }
+  ctx.stroke();
+  ctx.strokeStyle = '#475569'; ctx.lineWidth = 1; ctx.setLineDash([4,3]);
+  const mux = pad + (mu-xmin)/(xmax-xmin)*(w-2*pad);
+  ctx.beginPath(); ctx.moveTo(mux, pad); ctx.lineTo(mux, h-pad); ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+// ===== BINOMIAL =====
+function drawBinomial() {
+  const n = parseInt(document.getElementById('binom-n').value);
+  const p = parseFloat(document.getElementById('binom-p').value);
+  document.getElementById('binom-n-val').textContent = n;
+  document.getElementById('binom-p-val').textContent = p.toFixed(2);
+  function binom(n, k) {
+    if(k < 0 || k > n) return 0;
+    let c = 1;
+    for(let i = 0; i < k; i++) c = c * (n-i) / (i+1);
+    return c;
+  }
+  const probs = Array.from({length:n+1}, (_,k) => binom(n,k) * p**k * (1-p)**(n-k));
+  const maxP = Math.max(...probs);
+  const cv = clearCanvas('binomial-canvas');
+  if(!cv) return;
+  const { ctx, w, h } = cv;
+  const pad = 40, bw = Math.max(4, (w-2*pad)/(n+1)*.7);
+  const gap = (w-2*pad)/(n+1);
+  probs.forEach((prob, k) => {
+    const bh = (h-2*pad)*prob/maxP;
+    const x = pad + k*gap;
+    const y = h-pad-bh;
+    const t = k/n;
+    const r = Math.round(0 + t*124), g = Math.round(212 + t*(58-212)), b2 = Math.round(255 + t*(237-255));
+    ctx.fillStyle = `rgba(${r},${g},${b2},0.8)`;
+    ctx.fillRect(x, y, bw, bh);
+  });
+  const mean = n*p, std = Math.sqrt(n*p*(1-p));
+  ctx.fillStyle = '#94a3b8'; ctx.font = '11px Space Mono'; ctx.textAlign = 'left';
+  ctx.fillText(`μ = np = ${mean.toFixed(1)}  σ = √(npq) = ${std.toFixed(2)}`, pad, pad-10);
+}
+
+// ===== UNIFORM =====
+function drawUniform() {
+  const a = parseFloat(document.getElementById('unif-a').value) || 0;
+  const b = parseFloat(document.getElementById('unif-b').value) || 10;
+  const n = parseInt(document.getElementById('unif-n').value) || 1000;
+  const bins = 20;
+  const counts = Array(bins).fill(0);
+  for(let i = 0; i < n; i++) {
+    const v = a + Math.random() * (b - a);
+    const bin = Math.min(bins-1, Math.floor((v-a)/(b-a)*bins));
+    counts[bin]++;
+  }
+  const maxC = Math.max(...counts);
+  const cv = clearCanvas('uniform-canvas');
+  if(!cv) return;
+  const { ctx, w, h } = cv;
+  const pad = 40, bw = (w-2*pad)/bins;
+  counts.forEach((c, i) => {
+    const bh = (h-2*pad)*c/maxC;
+    const x = pad + i*bw;
+    const y = h-pad-bh;
+    ctx.fillStyle = 'rgba(132,204,22,0.7)';
+    ctx.fillRect(x+1, y, bw-2, bh);
+  });
+  const expLine = h-pad-(h-2*pad)*0.85;
+  ctx.strokeStyle = 'rgba(245,158,11,0.7)'; ctx.setLineDash([5,3]); ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(pad, expLine); ctx.lineTo(w-pad, expLine); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#94a3b8'; ctx.font = '11px Space Mono'; ctx.textAlign = 'left';
+  ctx.fillText(`U(${a}, ${b})  mean=${((a+b)/2).toFixed(1)}`, pad, pad-10);
+}
+
+// ===== CORRELATION =====
+let scatterData = [];
+
+function generateScatter() {
+  const target = parseFloat(document.getElementById('corr-slider').value)/100;
+  document.getElementById('corr-target').textContent = `r ≈ ${target.toFixed(2)}`;
+  const n = parseInt(document.getElementById('corr-n').value) || 60;
+  const xs = Array.from({length:n}, () => Math.random()*10);
+  const noise = Math.sqrt(1 - target*target);
+  const ys = xs.map(x => x*target + noise*(Math.random()*10-5));
+  scatterData = xs.map((x,i) => ({x, y: ys[i]}));
+  const actualR = computeR(xs, ys);
+  document.getElementById('corr-r').textContent = actualR.toFixed(3);
+  document.getElementById('corr-r2').textContent = (actualR*actualR).toFixed(3);
+  const interp = Math.abs(actualR) > 0.7 ? 'Strong' : Math.abs(actualR) > 0.4 ? 'Moderate' : 'Weak';
+  const dir = actualR > 0 ? 'positive' : 'negative';
+  document.getElementById('corr-interp').textContent = `${interp} ${dir} correlation`;
+  drawScatter(xs, ys, actualR);
+  addXP(10, 'correlation analysis');
+  state.moduleProgress.correlation = Math.min(100, state.moduleProgress.correlation + 20);
+  updateModuleProgressUI();
+}
+
+function computeR(xs, ys) {
+  const n = xs.length;
+  const mx = xs.reduce((s,v)=>s+v)/n, my = ys.reduce((s,v)=>s+v)/n;
+  const num = xs.reduce((s,v,i)=>s+(v-mx)*(ys[i]-my), 0);
+  const den = Math.sqrt(xs.reduce((s,v)=>s+(v-mx)**2,0) * ys.reduce((s,v)=>s+(v-my)**2,0));
+  return den ? num/den : 0;
+}
+
+function drawScatter(xs, ys, r) {
+  const cv = clearCanvas('scatter-canvas');
+  if(!cv) return;
+  const { ctx, w, h } = cv;
+  const pad = 40;
+  const minX = Math.min(...xs), maxX = Math.max(...xs);
+  const minY = Math.min(...ys), maxY = Math.max(...ys);
+  const toX = v => pad + (v-minX)/(maxX-minX)*(w-2*pad);
+  const toY = v => h-pad - (v-minY)/(maxY-minY)*(h-2*pad);
+  ctx.strokeStyle = '#1e2d4a'; ctx.lineWidth = 1;
+  for(let i = 0; i <= 5; i++) {
+    ctx.beginPath(); ctx.moveTo(pad+i*(w-2*pad)/5, pad); ctx.lineTo(pad+i*(w-2*pad)/5, h-pad); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pad, pad+i*(h-2*pad)/5); ctx.lineTo(w-pad, pad+i*(h-2*pad)/5); ctx.stroke();
+  }
+  // Regression line
+  const n = xs.length;
+  const mx = xs.reduce((s,v)=>s+v)/n, my = ys.reduce((s,v)=>s+v)/n;
+  const slope = xs.reduce((s,v,i)=>s+(v-mx)*(ys[i]-my),0)/xs.reduce((s,v)=>s+(v-mx)**2,0);
+  const intercept = my - slope*mx;
+  ctx.strokeStyle = 'rgba(245,158,11,0.8)'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(toX(minX), toY(slope*minX+intercept)); ctx.lineTo(toX(maxX), toY(slope*maxX+intercept)); ctx.stroke();
+  // Points
+  xs.forEach((x, i) => {
+    ctx.beginPath(); ctx.arc(toX(x), toY(ys[i]), 3, 0, Math.PI*2);
+    ctx.fillStyle = r > 0 ? 'rgba(0,212,255,0.7)' : 'rgba(236,72,153,0.7)';
+    ctx.fill();
+  });
+}
+
+function updateCorrelation() {
+  const val = parseFloat(document.getElementById('corr-slider').value)/100;
+  document.getElementById('corr-target').textContent = `r ≈ ${val.toFixed(2)}`;
+  generateScatter();
+}
+
+// ===== NORMALIZATION DEMO =====
+let normCount = 0;
+
+function calcNorm() {
+  const vals = document.getElementById('norm-input').value.split(',').map(v => parseFloat(v.trim())).filter(v => !isNaN(v));
+  if(!vals.length) return;
+  const min = Math.min(...vals), max = Math.max(...vals);
+  const mean = vals.reduce((s,v)=>s+v)/vals.length;
+  const std = Math.sqrt(vals.reduce((s,v)=>s+(v-mean)**2)/vals.length) || 1;
+  const tbody = document.getElementById('norm-tbody');
+  tbody.innerHTML = vals.map(v => {
+    const mm = (v-min)/(max-min||1);
+    const zs = (v-mean)/std;
+    const mmPct = (mm*100).toFixed(0);
+    const zsClamped = Math.min(1, Math.max(0, (zs+3)/6));
+    return `<tr>
+      <td class="val-original">${v}</td>
+      <td class="val-minmax">${mm.toFixed(4)}</td>
+      <td class="val-zscore">${zs.toFixed(4)}</td>
+      <td>
+        <div style="display:flex;gap:4px;align-items:center">
+          <div class="norm-bar" style="flex:1">
+            <div class="norm-bar-fill" style="width:${mmPct}%;background:var(--accent)"></div>
+          </div>
+          <div class="norm-bar" style="flex:1">
+            <div class="norm-bar-fill" style="width:${(zsClamped*100).toFixed(0)}%;background:var(--accent4)"></div>
+          </div>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+  drawNormChart(vals);
+  addXP(10, 'normalization');
+  normCount++;
+  if(normCount >= 1) { unlockBadge('dataPrep'); state.moduleProgress.normalization = Math.min(100, state.moduleProgress.normalization + 25); updateModuleProgressUI(); }
+}
+
+function normRandom() {
+  const n = Math.floor(Math.random()*5)+4;
+  const vals = Array.from({length:n}, () => Math.floor(Math.random()*200+1));
+  document.getElementById('norm-input').value = vals.join(', ');
+  calcNorm();
+}
+
+function drawNormChart(vals) {
+  const cv = clearCanvas('norm-canvas');
+  if(!cv) return;
+  const { ctx, w, h } = cv;
+  const min = Math.min(...vals), max = Math.max(...vals);
+  const mean = vals.reduce((s,v)=>s+v)/vals.length;
+  const std = Math.sqrt(vals.reduce((s,v)=>s+(v-mean)**2)/vals.length) || 1;
+  const pad = 40; const n = vals.length;
+  const spacing = (w-2*pad)/(n-1||1);
+  // Original
+  ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  vals.forEach((v, i) => {
+    const x = pad + i*spacing;
+    const y = h/2 - (v-min)/(max-min||1)*(h/2-pad);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+  // Min-max
+  ctx.strokeStyle = '#00d4ff'; ctx.lineWidth = 2;
+  ctx.beginPath();
+  vals.forEach((v, i) => {
+    const mm = (v-min)/(max-min||1);
+    const x = pad + i*spacing;
+    const y = h/2 - mm*(h/2-pad);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+  // Z-score
+  ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 2;
+  const zvals = vals.map(v => (v-mean)/std);
+  const zmin = Math.min(...zvals), zmax = Math.max(...zvals);
+  ctx.beginPath();
+  zvals.forEach((z, i) => {
+    const x = pad + i*spacing;
+    const y = h/2 - (z-zmin)/(zmax-zmin||1)*(h/2-pad);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+  ctx.fillStyle = '#94a3b8'; ctx.font = '10px Space Mono'; ctx.textAlign = 'left';
+  ctx.fillText('— original', pad, h-10);
+  ctx.fillStyle = '#00d4ff'; ctx.fillText('— min-max', pad+80, h-10);
+  ctx.fillStyle = '#f59e0b'; ctx.fillText('— z-score', pad+170, h-10);
+}
+
+// ===== QUIZ =====
+const QUIZ_QUESTIONS = [
+  { q: 'What is the dot product of [1,2,3] and [4,5,6]?', formula: 'a·b = Σ aᵢbᵢ', opts: ['32', '14', '36', '27'], ans: 0, exp: '1×4 + 2×5 + 3×6 = 4+10+18 = 32' },
+  { q: 'Which formula computes Min-Max normalization?', formula: '', opts: ['(x−μ)/σ', '(x−min)/(max−min)', 'x / max', 'x − mean'], ans: 1, exp: 'Min-Max scales to [0,1]: x\' = (x−min)/(max−min)' },
+  { q: 'What does a Pearson correlation of -1 mean?', formula: '', opts: ['No correlation', 'Perfect positive', 'Perfect negative', 'Moderate positive'], ans: 2, exp: 'r = -1 means perfect inverse linear relationship' },
+  { q: 'For a normal distribution, what % of data falls within ±1 standard deviation?', formula: '', opts: ['50%', '68%', '95%', '99.7%'], ans: 1, exp: 'The empirical rule: ≈68% within ±1σ, 95% within ±2σ, 99.7% within ±3σ' },
+  { q: 'What is the Z-score standardization formula?', formula: '', opts: ['x / σ', '(x−μ)/σ', '(x−min)/(max−min)', '√(x−μ)'], ans: 1, exp: 'Z-score: x\' = (x−μ)/σ, centers at 0, scales by standard deviation' },
+  { q: 'What is the determinant of [[2,0],[0,3]]?', formula: 'det = ad − bc', opts: ['5', '6', '0', '1'], ans: 1, exp: 'det = 2×3 − 0×0 = 6' },
+  { q: 'If P(A)=0.3 and P(B|A)=0.8, what is P(A∩B)?', formula: 'P(A∩B) = P(B|A)×P(A)', opts: ['0.24', '0.56', '0.11', '0.80'], ans: 0, exp: 'P(A∩B) = P(B|A) × P(A) = 0.8 × 0.3 = 0.24' },
+  { q: 'What does the trace of a matrix equal?', formula: '', opts: ['Sum of all elements', 'Sum of diagonal', 'Determinant', 'Product of eigenvalues'], ans: 1, exp: 'Trace = sum of diagonal elements. Also equals sum of eigenvalues.' },
+  { q: 'Which distribution is symmetric and bell-shaped?', formula: '', opts: ['Uniform', 'Binomial (p≠0.5)', 'Normal', 'Exponential'], ans: 2, exp: 'The Normal (Gaussian) distribution is symmetric around μ' },
+  { q: 'What is the variance of dataset [2, 4, 4, 4, 5, 5, 7, 9]?', formula: 'σ² = (1/n)Σ(xᵢ−x̄)²', opts: ['4.0', '2.0', '5.0', '3.5'], ans: 0, exp: 'Mean=5, σ² = [(9+1+1+1+0+0+4+16)/8] = 32/8 = 4.0' }
+];
+
+function initQuiz() {
+  state.quizIndex = 0;
+  state.quizScore = 0;
+  state.quizAnswers = [];
+  renderQuestion();
+  renderQuizDots();
+}
+
+function renderQuestion() {
+  const q = QUIZ_QUESTIONS[state.quizIndex];
+  const container = document.getElementById('quiz-container');
+  document.getElementById('q-num').textContent = state.quizIndex + 1;
+  document.getElementById('q-total').textContent = QUIZ_QUESTIONS.length;
+  document.getElementById('q-score').textContent = state.quizScore;
+  const letters = ['A','B','C','D'];
+  container.innerHTML = `
+    <div class="quiz-question">
+      <div class="quiz-q-text">${q.q}</div>
+      ${q.formula ? `<div class="quiz-q-formula">${q.formula}</div>` : ''}
+      <div class="quiz-options">
+        ${q.opts.map((o,i) => `<div class="quiz-option" onclick="selectAnswer(${i})" id="opt-${i}"><span style="font-family:var(--mono);color:var(--text3);font-size:13px">${letters[i]}.</span> ${o}</div>`).join('')}
+      </div>
+      <div class="quiz-feedback" id="quiz-feedback"></div>
+    </div>`;
+  state.quizAnswered = false;
+  document.getElementById('btn-next').style.display = 'none';
+}
+
+function selectAnswer(i) {
+  if(state.quizAnswered) return;
+  state.quizAnswered = true;
+  const q = QUIZ_QUESTIONS[state.quizIndex];
+  const correct = i === q.ans;
+  if(correct) { state.quizScore++; addXP(20, 'correct answer'); state.correctAnswers++; }
+  state.quizAnswers[state.quizIndex] = correct;
+  renderQuizDots();
+  document.querySelectorAll('.quiz-option').forEach((el, j) => {
+    el.classList.add('disabled');
+    if(j === q.ans) el.classList.add('correct');
+    else if(j === i && !correct) el.classList.add('wrong');
+  });
+  const fb = document.getElementById('quiz-feedback');
+  fb.className = 'quiz-feedback ' + (correct ? 'correct' : 'wrong');
+  fb.style.display = 'block';
+  fb.textContent = (correct ? '✓ Correct! ' : '✗ Not quite. ') + q.exp;
+  document.getElementById('btn-next').style.display = 'inline-flex';
+  document.getElementById('q-score').textContent = state.quizScore;
+  if(state.quizScore === QUIZ_QUESTIONS.length && state.quizIndex === QUIZ_QUESTIONS.length-1) {
+    unlockBadge('quizAce');
+    state.moduleProgress.quiz = 100;
+    updateModuleProgressUI();
+  }
+}
+
+function nextQuestion() {
+  if(state.quizIndex < QUIZ_QUESTIONS.length - 1) {
+    state.quizIndex++;
+    renderQuestion();
+    renderQuizDots();
+  } else {
+    finishQuiz();
+  }
+}
+
+function finishQuiz() {
+  const pct = Math.round(state.quizScore / QUIZ_QUESTIONS.length * 100);
+  document.getElementById('quiz-container').innerHTML = `
+    <div class="quiz-question" style="text-align:center;padding:40px">
+      <div style="font-size:48px;margin-bottom:16px">${pct >= 80 ? '🏆' : pct >= 60 ? '🎯' : '📚'}</div>
+      <div style="font-family:var(--serif);font-size:28px;margin-bottom:8px">Quiz Complete!</div>
+      <div style="color:var(--text2);margin-bottom:20px">You scored ${state.quizScore} / ${QUIZ_QUESTIONS.length} (${pct}%)</div>
+      <div style="font-family:var(--mono);font-size:14px;color:var(--accent)">+${state.quizScore * 20} XP earned</div>
+    </div>`;
+  document.getElementById('btn-next').style.display = 'none';
+}
+
+function restartQuiz() { initQuiz(); }
+
+function renderQuizDots() {
+  const dots = document.getElementById('quiz-dots');
+  dots.innerHTML = QUIZ_QUESTIONS.map((_, i) => {
+    let cls = 'quiz-dot';
+    if(state.quizAnswers[i] === true) cls += ' done';
+    else if(state.quizAnswers[i] === false) cls += ' wrong-dot';
+    else if(i === state.quizIndex) cls += ' current';
+    return `<div class="${cls}"></div>`;
+  }).join('');
+}
+
+// ===== MODULE PROGRESS =====
+const MODULE_META = [
+  { id: 'vectors', icon: '➡️', name: 'Vectors', color: '#00d4ff' },
+  { id: 'matrices', icon: '🔢', name: 'Matrices', color: '#7c3aed' },
+  { id: 'probability', icon: '🎲', name: 'Probability', color: '#f59e0b' },
+  { id: 'descriptive', icon: '📊', name: 'Descriptive Stats', color: '#10b981' },
+  { id: 'distributions', icon: '📈', name: 'Distributions', color: '#ec4899' },
+  { id: 'correlation', icon: '🔗', name: 'Correlation', color: '#06b6d4' },
+  { id: 'normalization', icon: '⚖️', name: 'Normalization', color: '#84cc16' },
+  { id: 'quiz', icon: '🧠', name: 'Quiz Arena', color: '#f97316' }
+];
+
+function updateModuleProgressUI() {
+  MODULE_META.forEach(m => {
+    const el = document.getElementById(`prog-${m.id}`);
+    if(el) el.style.width = state.moduleProgress[m.id] + '%';
+  });
+}
+
+function renderModuleProgress() {
+  const el = document.getElementById('module-prog-list');
+  if(!el) return;
+  el.innerHTML = MODULE_META.map(m => `
+    <div class="module-prog-item">
+      <div class="module-prog-icon">${m.icon}</div>
+      <div class="module-prog-info">
+        <div class="module-prog-name">${m.name}</div>
+        <div class="module-prog-bar"><div class="module-prog-fill" style="width:${state.moduleProgress[m.id]}%;background:${m.color}"></div></div>
+      </div>
+      <div class="module-prog-pct">${state.moduleProgress[m.id]}%</div>
+    </div>`).join('');
+}
+
+// ===== TOAST =====
+function showToast(msg, type = 'info') {
+  const t = document.getElementById('toast');
+  const icon = type === 'success' ? '🏅' : 'ℹ️';
+  document.getElementById('toast-icon').textContent = icon;
+  document.getElementById('toast-msg').textContent = msg;
+  t.className = `toast ${type} show`;
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ===== FLOATING SYMBOLS =====
+function initFloatBg() {
+  const symbols = ['Σ','π','√','∫','μ','σ','∞','θ','λ','∂','∇','≈','≠','∈'];
+  const bg = document.getElementById('float-bg');
+  for(let i = 0; i < 12; i++) {
+    const el = document.createElement('div');
+    el.className = 'float-symbol';
+    el.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+    el.style.left = (Math.random()*100)+'vw';
+    el.style.top = (Math.random()*100)+'vh';
+    el.style.fontSize = (Math.random()*40+20)+'px';
+    el.style.animationDuration = (Math.random()*20+15)+'s';
+    el.style.animationDelay = (Math.random()*15)+'s';
+    bg.appendChild(el);
+  }
+}
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', () => {
+  initFloatBg();
+  initMatrices();
+  updateXPUI();
+  renderBadges();
+  renderTopBadges();
+  updateModuleProgressUI();
+  // Init quiz content areas
+  document.getElementById('vectors-quiz-content').innerHTML = '<div style="color:var(--text2);padding:20px;text-align:center">Complete the Concepts tab first, then practice here! Use the Quiz Arena for full testing.</div>';
+  document.getElementById('matrices-quiz-content').innerHTML = '<div style="color:var(--text2);padding:20px;text-align:center">Use the Calculator tab to explore matrix operations. Take the full quiz in Quiz Arena!</div>';
+});
+</script>
+</body>
+</html>
